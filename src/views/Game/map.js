@@ -1,7 +1,7 @@
 
 
 export const colorMap = {
-    white: '#fff',
+    white: '#aaa',
     green: '#2fc093',
     red: '#da3e18',
     blue: '#13b1ff',

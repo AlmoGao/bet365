@@ -6,8 +6,9 @@
         </van-tabs>
 
         <div class="boxs">
-            <div class="box" @click="curr = key" v-for="(val, key) in colorMap" :key="key">
-                <div class="box_c" :style="{ border: `1px solid ${val}`, backgroundColor: curr == key ? val : '' }">
+            <div class="box" @click="curr = key" v-for="(val, key) in props.config.number_json" :key="key">
+                <div class="box_c"
+                    :style="{ border: `1px solid ${colorMap[key]}`, backgroundColor: curr == key ? colorMap[key] : '' }">
                 </div>
                 <div>{{ colorTextMap[key] }}</div>
             </div>
@@ -16,8 +17,21 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, computed } from "vue"
 import { colorMap, colorTextMap } from "../map"
+import store from "@/store"
+
+const game = computed(() => store.state.currGame || {})
+const props = defineProps({
+    numbers: {
+        type: Array,
+        default: () => []
+    },
+    config: {
+        type: Object,
+        default: () => { }
+    }
+})
 
 const active = ref(0)
 const curr = ref('')

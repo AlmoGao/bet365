@@ -7,13 +7,13 @@ import store from "./store";
 import http from "@/api"
 import { _changeLang } from "@/lang/index";
 
-http.config().then(res => {
-  store.commit('setConfig', res || {})
-  document.title = res.name || '--'
-  if (!localStorage.getItem("lang")) {
-    _changeLang(res.lang)
-  }
-})
+// http.config().then(res => {
+//   store.commit('setConfig', res || {})
+//   document.title = res.name || '--'
+//   if (!localStorage.getItem("lang")) {
+//     _changeLang(res.lang)
+//   }
+// })
 
 if (store.state.token) {
   store.dispatch("updateUser");

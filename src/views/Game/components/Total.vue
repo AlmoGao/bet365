@@ -6,12 +6,13 @@
         </van-tabs>
 
         <div class="content">
-            <div class="tip">选择范围：6个号码总和（不包括特别号码）</div>
+            <div class="tip">选择范围：{{ game.max_number }}个号码总和（不包括特别号码）</div>
 
             <div class="boxs">
-                <div class="box" v-for="i in 10" :class="{ 'active_box': i == 5 }">
-                    <span>21 - 74</span>
-                    <span class="val">82.00</span>
+                <div class="box" v-for="(val, key) in props.config.sum_json" :key="key"
+                    :class="{ 'active_box': curr == key }">
+                    <span>{{ key }}</span>
+                    <span class="val">{{ val }}</span>
                 </div>
             </div>
         </div>
@@ -19,9 +20,23 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, computed } from "vue"
+import store from "@/store"
+
+const game = computed(() => store.state.currGame || {})
+const props = defineProps({
+    numbers: {
+        type: Array,
+        default: () => []
+    },
+    config: {
+        type: Object,
+        default: () => { }
+    }
+})
 
 const active = ref(0)
+const curr = ref('')
 </script>
 
 <style lang="less" scoped>
@@ -45,10 +60,17 @@ const active = ref(0)
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                border-bottom: 1px solid #eee;
+                border-right: 1px solid #eee;
+
+                &:nth-child(2n) {
+                    border-right: none;
+                }
 
                 .val {
-                    margin-left: 1rem;
-                    color: #ffde00;
+                    margin-left: 2rem;
+                    color: #d8bc00;
+                    font-weight: bold;
                 }
             }
 

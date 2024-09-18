@@ -1,23 +1,25 @@
 <!-- 投注页 -->
 <template>
     <div class="page-game">
-        <Top :title="'369'" />
+        <Top :title="game.name" />
 
         <div>
             <van-tabs v-model:active="active" shrink animated>
                 <van-tab title="投注盘">
                     <div class="mid"></div>
                     <!-- 号码 -->
-                    <Number />
+                    <Number :numbers="numbers" :config="config" />
                     <div class="mid"></div>
+                    <!-- 球得颜色 -->
+                    <BallColor :numbers="numbers" :config="config" />
                     <!-- 颜色 -->
-                    <Color />
+                    <Color :numbers="numbers" :config="config" />
                     <div class="mid"></div>
                     <!-- 二选一 -->
-                    <One />
+                    <One :numbers="numbers" :config="config" />
                     <div class="mid"></div>
                     <!-- 总和  -->
-                    <Total />
+                    <Total :numbers="numbers" :config="config" />
                     <div class="mid"></div>
                     <div class="mid"></div>
                 </van-tab>
@@ -84,16 +86,77 @@
 
 <script setup>
 import Top from "@/components/Top.vue"
-import { ref } from "vue"
+import { ref, computed } from "vue"
 import Number from "./components/Number.vue"
+import BallColor from "./components/BallColor.vue"
 import Color from "./components/Color.vue"
 import One from "./components/One.vue"
 import Total from "./components/Total.vue"
 import Record from "./Record.vue"
+import http from "@/api/index"
+import store from "@/store"
 
 const active = ref(0)
-const showBottom = ref(true)
+const showBottom = ref(false)
+const game = computed(() => store.state.currGame || {})
 
+const numbers = ref([])
+const config = ref({
+    number_json: {}, // 号码和颜色
+    oe_json: {}, // 单双赔率
+    bs_json: {}, // 大小赔率
+    single_json: {}, // 单试
+    combination_json: {}, // 组合
+    special_json: {}, // 特殊
+    sum_json: {}, // 总和
+    yanse_json: {}, // 颜色
+    other_json: {}, // 其他
+})
+const getInfo = () => {
+    http.game_payout({
+        lotto_id: game.value.id
+    }).then(res => {
+        if (res) {
+            if (res.number_json) {
+                try {
+                    config.value.number_json = JSON.parse(res.number_json)
+                    for (let key in config.value.number_json) {
+                        config.value.number_json[key] = config.value.number_json[key].split(',')
+                        numbers.value.push(...config.value.number_json[key])
+                        numbers.value = numbers.value.sort((a, b) => a - b)
+                    }
+                } catch { }
+            }
+            if (res.oe_json) {
+                try { config.value.oe_json = JSON.parse(res.oe_json) } catch { }
+            }
+            if (res.bs_json) {
+                try { config.value.bs_json = JSON.parse(res.bs_json) } catch { }
+            }
+            if (res.single_json) {
+                try { config.value.single_json = JSON.parse(res.single_json) } catch { }
+            }
+            if (res.combination_json) {
+                try { config.value.combination_json = JSON.parse(res.combination_json) } catch { }
+            }
+            if (res.special_json) {
+                try { config.value.special_json = JSON.parse(res.special_json) } catch { }
+            }
+            if (res.sum_json) {
+                try { config.value.sum_json = JSON.parse(res.sum_json) } catch { }
+            }
+            if (res.yanse_json) {
+                try { config.value.yanse_json = JSON.parse(res.yanse_json) } catch { }
+            }
+            if (res.other_json) {
+                try { config.value.other_json = JSON.parse(res.other_json) } catch { }
+            }
+        }
+        console.error('----->', config.value)
+        console.error(numbers.value)
+    })
+}
+getInfo()
 
 </script>
 

@@ -1,6 +1,12 @@
 import http from "./request";
 
 class HttpService {
+  lottoList() {
+    // 彩票列表
+    return http("/api/lotto/list", {
+      method: "get",
+    });
+  }
   message() {
     // 未读公告
     return http("/api/user/message", {
@@ -29,6 +35,13 @@ class HttpService {
     // 获取个人信息
     return http("/api/user/index", {
       method: "get",
+    });
+  }
+  game_payout(data) {
+    // 玩法配置
+    return http("/api/lotto/game_payout", {
+      method: "post",
+      data,
     });
   }
   register(data) {
@@ -62,20 +75,6 @@ class HttpService {
   changepwd(data) {
     // 修改密码
     return http("/api/user/changepwd", {
-      method: "post",
-      data,
-    });
-  }
-  kline(data) {
-    // k线
-    return http("/api/product/kline", {
-      method: "post",
-      data,
-    });
-  }
-  buy(data) {
-    // 下单
-    return http("/api/order/buy", {
       method: "post",
       data,
     });

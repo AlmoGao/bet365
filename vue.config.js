@@ -19,8 +19,7 @@ module.exports = defineConfig({
   devServer: {
     proxy: {
       "/api": {
-        // target: "https://bimer.life/",
-        target: "https://ab.fkefu.xyz/",
+        target: "https://b.test99.top/",
         changeOrigin: true,
         logLevel: "debug",
       },

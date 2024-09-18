@@ -24,7 +24,7 @@
         </div>
         <div class="content" v-if="active == 1">
             <div class="tip">选择所有号码的奇偶数</div>
-            <div class="tr" v-for="i in 6">
+            <div class="tr" v-for="i in game.max_number">
                 <div class="name">第{{ i }}</div>
                 <div class="td" @click="clickItem(val2arr, i - 1, 1)" :class="{ 'active_td': val2arr[i - 1] == 1 }">
                     <van-icon name="success" />
@@ -39,7 +39,7 @@
         </div>
         <div class="content" v-if="active == 2">
             <div class="tip">选择每个号码高于或低于25</div>
-            <div class="tr" v-for="i in 6">
+            <div class="tr" v-for="i in game.max_number">
                 <div class="name">第{{ i }}</div>
                 <div class="td" @click="clickItem(val3arr, i - 1, 1)" :class="{ 'active_td': val3arr[i - 1] == 1 }">
                     <van-icon name="success" />
@@ -56,13 +56,30 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, computed } from "vue"
+import store from "@/store"
+
+const game = computed(() => store.state.currGame || {})
+const props = defineProps({
+    numbers: {
+        type: Array,
+        default: () => []
+    },
+    config: {
+        type: Object,
+        default: () => { }
+    }
+})
 
 const active = ref(0)
 
 const val1arr = ref([0])
-const val2arr = ref([0, 0, 0, 0, 0, 0])
-const val3arr = ref([0, 0, 0, 0, 0, 0])
+const val2arr = ref([])
+const val3arr = ref([])
+for (let i = 0; i < game.value.max_number; i++) {
+    val2arr.value.push(0)
+    val3arr.value.push(0)
+}
 
 
 const clickItem = (arr, i, val) => {

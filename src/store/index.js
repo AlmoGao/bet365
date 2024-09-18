@@ -8,6 +8,7 @@ export default createStore({
     token: '',
     userInfo: {},
     config: {},
+    currGame: {},
   },
   mutations: {
     setToken(state, val) {
@@ -18,6 +19,9 @@ export default createStore({
     },
     setConfig(state, val) {
       state.config = val
+    },
+    setCurrGame(state, val) {
+      state.currGame = val
     },
   },
   actions: {
