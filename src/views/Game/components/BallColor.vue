@@ -1,6 +1,6 @@
 <!-- 球的颜色  -->
 <template>
-    <div class="bet_ballcolor">
+    <div class="bet_ballcolor" v-if="open">
         <van-tabs v-model:active="active" shrink>
             <van-tab title="球的颜色"></van-tab>
         </van-tabs>
@@ -10,24 +10,30 @@
             <div class="box">
                 <div class="name"></div>
                 <div class="box_c" v-for="(val, key) in props.config.number_json" :key="key"
-                    :style="{ marginLeft: `${8 - Object.keys(props.config.number_json).length}rem` }">{{ colorTextMap[key]
+                    :style="{ marginLeft: `${8 - Object.keys(props.config.number_json).length}rem` }">{{
+                        colorTextMap[key]
                     }}
                 </div>
             </div>
             <div class="box" v-for="i in game.max_number" :key="i">
                 <div class="name">第{{ i }}</div>
-                <div class="box_c" v-for="(val, key) in props.config.number_json" :key="key"
+                <div @click="clickItem(i, key)" class="box_c" v-for="(val, key) in props.config.number_json" :key="key"
                     :style="{ border: `1px solid ${colorMap[key]}`, backgroundColor: curr[i] == key ? colorMap[key] : '', marginLeft: `${8 - Object.keys(props.config.number_json).length}rem` }">
                 </div>
             </div>
         </div>
     </div>
+    <div v-else></div>
 </template>
 
 <script setup>
 import { ref, computed } from "vue"
 import { colorMap, colorTextMap } from "../map"
 import store from "@/store"
+
+const emits = defineEmits(['preBet'])
+const open = computed(() => props.config.yanse_json && props.config.yanse_json[1])
+
 
 const game = computed(() => store.state.currGame || {})
 const props = defineProps({
@@ -43,6 +49,26 @@ const props = defineProps({
 
 const active = ref(0)
 const curr = ref([])
+const clickItem = (i, key) => {
+    if (curr.value[i] == key) {
+        curr.value[i] = ''
+    } else {
+        curr.value[i] = key
+    }
+    if (curr.value.some(a => a)) {
+        let p = 0
+        curr.value.forEach(item => {
+            if (item) p += 1
+        })
+        emits('preBet', {
+            code: 11,
+            key: curr.value,
+            p: props.config.yanse_json[p]
+        })
+    } else {
+        emits('preBet', {})
+    }
+}
 </script>
 
 <style lang="less" scoped>

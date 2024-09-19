@@ -5,31 +5,75 @@
         <span class="per_btn" @click="show = true">赔付</span>
 
         <van-tabs @change="changeTab" v-model:active="active" shrink>
-            <van-tab title="单式投注"></van-tab>
-            <van-tab title="组合投注"></van-tab>
-            <van-tab title="第1个号码"></van-tab>
-            <van-tab title="特别号码"></van-tab>
-        </van-tabs>
-        <div class="number_box">
-            <div class="tip">
-                <span>选择最多{{ game.max_number }}个号码</span>
-                <div class="random">随机选择</div>
-            </div>
+            <van-tab :title="game.name == 'bet365' ? '5球抽奖' : '单式投注'" name="a">
+                <div class="number_box">
+                    <div class="tip">
+                        <span>选择最多{{ game.max_number }}个号码</span>
+                        <!-- <div class="random">随机选择</div> -->
+                    </div>
 
-            <div class="numbers">
-                <div @click="clickItem(i)" class="number"
-                    :style="{ border: `1px solid ${getColor(i)}`, backgroundColor: bets.includes(i) ? getColor(i) : '' }"
-                    v-for="i in props.numbers">
-                    {{ i }}</div>
-            </div>
-        </div>
+                    <div class="numbers">
+                        <div @click="clickItem(i, 21)" class="number"
+                            :style="{ border: `1px solid ${getColor(i)}`, backgroundColor: bets.includes(i) ? getColor(i) : '' }"
+                            v-for="i in props.numbers">
+                            {{ i }}</div>
+                    </div>
+                </div>
+            </van-tab>
+            <van-tab title="组合投注" name="b" v-if="game.name != 'bet365'">
+                <div class="number_box">
+                    <div class="tip">
+                        <span>选择最多14个号码</span>
+                        <!-- <div class="random">随机选择</div> -->
+                    </div>
+
+                    <div class="numbers">
+                        <div @click="clickItem(i, 14)" class="number"
+                            :style="{ border: `1px solid ${getColor(i)}`, backgroundColor: bets.includes(i) ? getColor(i) : '' }"
+                            v-for="i in props.numbers">
+                            {{ i }}</div>
+                    </div>
+                </div>
+            </van-tab>
+            <van-tab title="第1个号码" name="c" v-if="open3">
+                <div class="number_box">
+                    <div class="tip">
+                        <span>选择第一个抽出的号码</span>
+                        <!-- <div class="random">随机选择</div> -->
+                    </div>
+
+                    <div class="numbers">
+                        <div @click="clickItem(i, 10)" class="number"
+                            :style="{ border: `1px solid ${getColor(i)}`, backgroundColor: bets.includes(i) ? getColor(i) : '' }"
+                            v-for="i in props.numbers">
+                            {{ i }}</div>
+                    </div>
+                </div>
+            </van-tab>
+            <van-tab title="特别号码" name="d" v-if="open4">
+                <div class="number_box">
+                    <div class="tip">
+                        <span>选择特别号码</span>
+                    </div>
+
+                    <div class="numbers">
+                        <div @click="clickItem(i, 15)" class="number"
+                            :style="{ border: `1px solid ${getColor(i)}`, backgroundColor: bets.includes(i) ? getColor(i) : '' }"
+                            v-for="i in props.numbers">
+                            {{ i }}</div>
+                    </div>
+                </div>
+            </van-tab>
+        </van-tabs>
+
     </div>
 
 
+    <!-- 赔率提示 -->
     <van-overlay z-index="100" teleport="body" :show="show" @click="show = false">
         <div class="bet_wrapper" @click="show = false">
             <!-- 365 -->
-            <div class="table" @click.stop v-if="game.name = 'bet365'">
+            <div class="table" @click.stop v-if="game.name == 'bet365'">
                 <div class="block">
                     <div class="title">选5球</div>
                     <div class="row">
@@ -153,6 +197,11 @@ import { ref, computed } from "vue"
 import { colorMap } from "../map"
 import store from "@/store"
 
+
+const open3 = computed(() => !!(props.config.other_json.first_numebr))
+const open4 = computed(() => !!(props.config.other_json.special_number))
+
+const emits = defineEmits(['preBet'])
 const show = ref(false)
 const game = computed(() => store.state.currGame || {})
 const props = defineProps({
@@ -176,16 +225,104 @@ const getColor = (num) => {
     return colorMap[color]
 }
 
-const active = ref(0)
+const active = ref('a')
 const changeTab = () => {
     bets.value = []
+    emits('preBet', {})
 }
 const bets = ref([])
-const clickItem = i => {
-    if (bets.value.includes(i)) {
-        bets.value = bets.value.filter(a => a != i)
-    } else {
-        bets.value.push(i)
+const clickItem = (i, key) => {
+    if (key == 14) { // 组合
+        if (bets.value.includes(i)) {
+            bets.value = bets.value.filter(a => a != i)
+        } else {
+            if (bets.value.length >= 14) return
+            bets.value.push(i)
+        }
+        if (bets.value.length) {
+            let p = 1
+            let length = bets.value.length > 5 ? 5 : bets.value.length
+            if (game.value.name == 'bet365') { // 365
+                const key = `${length}-${length}`
+                p = props.config.single_json[key]
+            } else { // 其他
+                const key = length
+                const arr = props.config.single_json[key].split('/')
+                p = (Number(arr[0]) + Number(arr[1])) / Number(arr[1])
+            }
+
+            emits('preBet', {
+                code: key,
+                key: bets.value,
+                p: p
+            })
+        } else {
+            emits('preBet', {})
+        }
+    }
+    if (key == 21) { // 单式
+        if (bets.value.includes(i)) {
+            bets.value = bets.value.filter(a => a != i)
+        } else {
+            if (bets.value.length >= game.value.max_number) return
+            bets.value.push(i)
+        }
+
+        if (bets.value.length) {
+            let p = 1
+            if (game.value.name == 'bet365') { // 365
+                const key = `${bets.value.length}-${bets.value.length}`
+                p = props.config.single_json[key]
+            } else { // 其他
+                const key = bets.value.length
+                const arr = props.config.single_json[key].split('/')
+                p = (Number(arr[0]) + Number(arr[1])) / Number(arr[1])
+            }
+
+            emits('preBet', {
+                code: key,
+                key: bets.value,
+                p: p
+            })
+        } else {
+            emits('preBet', {})
+        }
+    }
+    if (key == 10) { // 第一个号码
+        if (bets.value.includes(i)) {
+            bets.value = bets.value.filter(a => a != i)
+        } else {
+            if (bets.value.length >= 19) return
+            bets.value.push(i)
+        }
+
+        if (bets.value.length) {
+            emits('preBet', {
+                code: key,
+                key: bets.value,
+                p: props.config.other_json.first_numebr
+            })
+        } else {
+            emits('preBet', {})
+        }
+    }
+    if (key == 15) { // 特别号码
+        if (bets.value.includes(i)) {
+            bets.value = bets.value.filter(a => a != i)
+        } else {
+            if (bets.value.length >= 19) return
+            bets.value.push(i)
+        }
+
+        if (bets.value.length) {
+            emits('preBet', {
+                code: key,
+                key: bets.value,
+                p: props.config.other_json.special_number
+            })
+        } else {
+            emits('preBet', {})
+        }
     }
 }
 </script>

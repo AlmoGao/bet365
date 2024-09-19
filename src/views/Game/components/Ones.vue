@@ -2,51 +2,35 @@
 <template>
     <div class="bet_one">
         <van-tabs v-model:active="active" shrink>
-            <van-tab title="首个摇出号码 奇/偶数" name="f" v-if="open1"></van-tab>
-            <van-tab title="单数或双数" name="s"></van-tab>
-            <van-tab title="猜大小" name="t"></van-tab>
+            <van-tab title="单数或双数" name="f" v-if="open1"></van-tab>
+            <van-tab title="猜大小" name="s" v-if="open2"></van-tab>
         </van-tabs>
 
         <div class="content" v-if="active == 'f' && open1">
-            <div class="tip">选择奇数或偶数</div>
-            <div class="tr">
-                <div class="name">第一</div>
-                <div class="td" @click="clickItem(val1arr, 0, 1, 17)" :class="{ 'active_td': val1arr[0] == 1 }">
+            <div class="tip">选择某个号码的奇偶数</div>
+            <div class="tr" v-for="i in game.max_number">
+                <div class="name">第{{ i }}</div>
+                <div class="td" @click="clickItem(val2arr, i - 1, 1, 12)" :class="{ 'active_td': val2arr[i - 1] == 1 }">
                     <van-icon name="success" />
                     <span>单数</span>
                 </div>
                 <div class="line"></div>
-                <div class="td" @click="clickItem(val1arr, 0, 2, 17)" :class="{ 'active_td': val1arr[0] == 2 }">
+                <div class="td" @click="clickItem(val2arr, i - 1, 2, 12)" :class="{ 'active_td': val2arr[i - 1] == 2 }">
                     <van-icon name="success" />
                     <span>双数</span>
                 </div>
             </div>
         </div>
-        <div class="content" v-if="active == 's'">
-            <div class="tip">选择所有号码的奇偶数</div>
+        <div class="content" v-if="active == 's' && open2">
+            <div class="tip">选择某个号码高于或低于25</div>
             <div class="tr" v-for="i in game.max_number">
                 <div class="name">第{{ i }}</div>
-                <div class="td" @click="clickItem(val2arr, i - 1, 1, 18)" :class="{ 'active_td': val2arr[i - 1] == 1 }">
-                    <van-icon name="success" />
-                    <span>单数</span>
-                </div>
-                <div class="line"></div>
-                <div class="td" @click="clickItem(val2arr, i - 1, 2, 18)" :class="{ 'active_td': val2arr[i - 1] == 2 }">
-                    <van-icon name="success" />
-                    <span>双数</span>
-                </div>
-            </div>
-        </div>
-        <div class="content" v-if="active == 't'">
-            <div class="tip">选择每个号码高于或低于25</div>
-            <div class="tr" v-for="i in game.max_number">
-                <div class="name">第{{ i }}</div>
-                <div class="td" @click="clickItem(val3arr, i - 1, 1, 19)" :class="{ 'active_td': val3arr[i - 1] == 1 }">
+                <div class="td" @click="clickItem(val3arr, i - 1, 1, 13)" :class="{ 'active_td': val3arr[i - 1] == 1 }">
                     <van-icon name="success" />
                     <span>正好或高于25</span>
                 </div>
                 <div class="line"></div>
-                <div class="td" @click="clickItem(val3arr, i - 1, 2, 19)" :class="{ 'active_td': val3arr[i - 1] == 2 }">
+                <div class="td" @click="clickItem(val3arr, i - 1, 2, 13)" :class="{ 'active_td': val3arr[i - 1] == 2 }">
                     <van-icon name="success" />
                     <span>低于25</span>
                 </div>
@@ -59,9 +43,13 @@
 import { ref, computed } from "vue"
 import store from "@/store"
 
-const open1 = computed(() => !!(props.config.other_json.first_oe))
+
+const open1 = computed(() => props.config.oe_json && props.config.oe_json[1])
+const open2 = computed(() => props.config.bs_json && props.config.bs_json[1])
+
 
 const emits = defineEmits(['preBet'])
+
 const game = computed(() => store.state.currGame || {})
 const props = defineProps({
     numbers: {
@@ -76,7 +64,6 @@ const props = defineProps({
 
 const active = ref('f')
 
-const val1arr = ref([0])
 const val2arr = ref([])
 const val3arr = ref([])
 for (let i = 0; i < game.value.max_number; i++) {
@@ -92,34 +79,35 @@ const clickItem = (arr, i, val, key) => {
         arr[i] = val
     }
 
-    if (key == 17) { // 首个奇数/偶
-        if (arr[i]) {
+    if (key == 12) { // 奇数和偶数(一个或者多个)
+        if (arr.some(a => a)) {
+            let p = 0
+            arr.forEach(b => {
+                if (b) {
+                    p += 1
+                }
+            })
             emits('preBet', {
                 code: key,
-                key: [arr[i]],
-                p: props.config.other_json.first_oe.split('/')[arr[i] - 1]
+                key: arr,
+                p: props.config.oe_json[p]
             })
         } else {
             emits('preBet', {})
         }
     }
-    if (key == 18) { // 奇数和偶数(全选)
-        if (arr.every(a => a)) {
-            emits('preBet', {
-                code: key,
-                key: arr,
-                p: 53
+    if (key == 13) { // 猜大小(一个或者多个)
+        if (arr.some(a => a)) {
+            let p = 0
+            arr.forEach(b => {
+                if (b) {
+                    p += 1
+                }
             })
-        } else {
-            emits('preBet', {})
-        }
-    }
-    if (key == 19) { // 猜大小(全选)
-        if (arr.every(a => a)) {
             emits('preBet', {
                 code: key,
                 key: arr,
-                p: 53
+                p: props.config.bs_json[p]
             })
         } else {
             emits('preBet', {})

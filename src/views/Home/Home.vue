@@ -30,49 +30,49 @@
           </div>
           <div>49s</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == 'france'">
+        <div class="game" @click="clickItem(item)" v-if="item.name == '法国乐透'">
           <div class="game_icon">
             <img src="@/assets/games/game3.svg" alt="img">
           </div>
           <div>法国乐透</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == 'spain'">
+        <div class="game" @click="clickItem(item)" v-if="item.name == '西班牙乐透'">
           <div class="game_icon">
             <img src="@/assets/games/game4.svg" alt="img">
           </div>
           <div>西班牙乐透</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == 'spain'">
+        <div class="game" @click="clickItem(item)" v-if="item.name == '爱尔兰每日百万'">
           <div class="game_icon">
             <img src="@/assets/games/game5.svg" alt="img">
           </div>
           <div>爱尔兰每日百万</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == 'spain'">
+        <div class="game" @click="clickItem(item)" v-if="item.name == '欧洲百万'">
           <div class="game_icon">
             <img src="@/assets/games/game6.svg" alt="img">
           </div>
           <div>欧洲百万</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == 'spain'">
+        <div class="game" @click="clickItem(item)" v-if="item.name == '德国乐透'">
           <div class="game_icon">
             <img src="@/assets/games/game7.svg" alt="img">
           </div>
           <div>德国乐透</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == 'spain'">
+        <div class="game" @click="clickItem(item)" v-if="item.name == '爱尔兰乐透'">
           <div class="game_icon">
             <img src="@/assets/games/game8.svg" alt="img">
           </div>
           <div>爱尔兰乐透</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == 'spain'">
+        <div class="game" @click="clickItem(item)" v-if="item.name == '纽约乐透'">
           <div class="game_icon">
             <img src="@/assets/games/game9.svg" alt="img">
           </div>
           <div>纽约乐透</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == 'spain'">
+        <div class="game" @click="clickItem(item)" v-if="item.name == '加拿大乐透'">
           <div class="game_icon">
             <img src="@/assets/games/game10.svg" alt="img">
           </div>
@@ -106,12 +106,20 @@ const carousel = computed(() => store.state.config.carousel || []) // 轮播
 const notice = computed(() => store.state.config.notice || '') // 公告
 const logo = computed(() => store.state.config.logo || '') // 公告
 
+// 投注类型
+const getTypes = () => {
+  http.c_list().then(res => {
+    console.error('---', res)
+    store.commit('setTypes', res || [])
+  })
+}
+getTypes()
+
 
 // 获取分类
 const games = ref([])
 const getGames = () => {
   http.lottoList().then(res => {
-    console.error(res)
     games.value = res || []
   })
 }

@@ -8,18 +8,20 @@
                 <van-tab title="投注盘">
                     <div class="mid"></div>
                     <!-- 号码 -->
-                    <Number :numbers="numbers" :config="config" />
+                    <Number @preBet="preBet" :numbers="numbers" :config="config" />
                     <div class="mid"></div>
                     <!-- 球得颜色 -->
-                    <BallColor :numbers="numbers" :config="config" />
+                    <BallColor @preBet="preBet" :numbers="numbers" :config="config" />
                     <!-- 颜色 -->
-                    <Color :numbers="numbers" :config="config" />
+                    <Color @preBet="preBet" :numbers="numbers" :config="config" />
                     <div class="mid"></div>
+                    <!-- 二选一 不限 -->
+                    <Ones @preBet="preBet" :numbers="numbers" :config="config" />
                     <!-- 二选一 -->
-                    <One :numbers="numbers" :config="config" />
+                    <One @preBet="preBet" :numbers="numbers" :config="config" />
                     <div class="mid"></div>
                     <!-- 总和  -->
-                    <Total :numbers="numbers" :config="config" />
+                    <Total @preBet="preBet" :numbers="numbers" :config="config" />
                     <div class="mid"></div>
                     <div class="mid"></div>
                 </van-tab>
@@ -27,6 +29,62 @@
                     <Record />
                 </van-tab>
             </van-tabs>
+        </div>
+    </div>
+
+    <!-- 预投注 -->
+    <div class="pre_bet" v-if="preItem.code">
+        <div class="title">
+            <van-icon @click="preItem = {}" class="close" name="cross" />
+            <div>{{ typeMap[preItem.code] }}</div>
+            <div style="flex:1"></div>
+            <div>{{ preItem.p }}</div>
+        </div>
+        <div class="content">
+            <div class="bet_info">
+                <!-- 总和 -->
+                <div v-if="preItem.code == 20">
+                    {{ preItem.key }}
+                </div>
+                <!-- 奇数/偶  -->
+                <div v-if="[12, 17, 18].includes(preItem.code)"
+                    style="display: flex;flex-wrap: wrap;align-items: center;">
+                    <div style="margin:0 2rem 1rem 0;" v-for="(item, i) in preItem.key" :key="i"
+                        :style="{ display: item ? 'block' : 'none' }">第{{ i + 1 }} {{ item ==
+                            1 ? '奇数' : '偶数' }}</div>
+                </div>
+                <!-- 大小  -->
+                <div v-if="[13, 19].includes(preItem.code)" style="display: flex;flex-wrap: wrap;align-items: center;">
+                    <div style="margin:0 2rem 1rem 0;" :style="{ display: item ? 'block' : 'none' }"
+                        v-for="(item, i) in preItem.key" :key="i">第{{ i + 1 }} {{ item ==
+                            1 ? '25及高于' : '低于25' }}</div>
+                </div>
+                <!-- 特殊球颜色 -->
+                <div v-if="preItem.code == 16" style="display: flex;align-items: center;">
+                    <div style="width:8rem;height:8rem;border-radius: 50%;margin-right:2rem"
+                        :style="{ backgroundColor: colorMap[preItem.key] }"></div>
+                    <span>{{ colorTextMap[preItem.key] }}</span>
+                </div>
+                <!-- 球的颜色 -->
+                <div v-if="[11].includes(preItem.code)" style="display: flex;flex-wrap: wrap;align-items: center;">
+                    <div v-for="(item, i) in preItem.key" :key="i" style="margin:0 2rem 1rem 0;;align-items: center;"
+                        :style="{ display: item ? 'flex' : 'none' }">
+                        <div>第{{ i + 1 }} </div>
+                        <div style="width:4rem;height:4rem;border-radius: 50%;margin:0 1rem"
+                            :style="{ backgroundColor: colorMap[item] }"></div>
+                        <span>{{ colorTextMap[item] }}</span>
+                    </div>
+                </div>
+                <!-- 特别号码/第一个号码/单式/组合 -->
+                <div v-if="[10, 15, 14, 21].includes(preItem.code)"
+                    style="display: flex;flex-wrap: wrap;align-items: center;">
+                    <div :style="{ backgroundColor: getColor(item) }" v-for="(item, i) in preItem.key" :key="i"
+                        style="margin:0 1rem 1rem 0;align-items: center;justify-content: center;width: 6rem;height: 6rem;border-radius: 50%;color:#fff;font-weight: bold;display: flex;">
+                        {{ item }}
+                    </div>
+                </div>
+            </div>
+            <div class="link">添加至投注单</div>
         </div>
     </div>
 
@@ -87,14 +145,35 @@
 <script setup>
 import Top from "@/components/Top.vue"
 import { ref, computed } from "vue"
+import { colorMap, colorTextMap } from './map'
 import Number from "./components/Number.vue"
 import BallColor from "./components/BallColor.vue"
 import Color from "./components/Color.vue"
 import One from "./components/One.vue"
+import Ones from "./components/Ones.vue"
 import Total from "./components/Total.vue"
 import Record from "./Record.vue"
 import http from "@/api/index"
 import store from "@/store"
+
+
+const getColor = (num) => {
+    let color = 'grey'
+    for (let key in config.value.number_json) {
+        if (config.value.number_json[key].includes(num)) {
+            color = key
+        }
+    }
+    return colorMap[color]
+}
+
+
+// 预投注
+const preItem = ref({})
+const preBet = item => { // code: 玩法  key: 投注项  p: 倍率
+    preItem.value = item
+}
+const typeMap = computed(() => store.state.typeMap || {})
 
 const active = ref(0)
 const showBottom = ref(false)
@@ -153,7 +232,6 @@ const getInfo = () => {
             }
         }
         console.error('----->', config.value)
-        console.error(numbers.value)
     })
 }
 getInfo()
@@ -300,6 +378,42 @@ getInfo()
                     background-color: #eee;
                 }
             }
+        }
+    }
+}
+
+.pre_bet {
+    position: fixed;
+    max-width: 720px;
+    width: 90%;
+    padding: 2rem 4rem;
+    border-radius: 2rem;
+    z-index: 999;
+    bottom: 6rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #E4E4E4;
+
+    .title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: bold;
+
+        .close {
+            margin-right: 2rem;
+        }
+    }
+
+    .content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4rem 0;
+
+        .link {
+            color: #076B4C;
+            white-space: nowrap;
         }
     }
 }

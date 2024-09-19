@@ -1,6 +1,12 @@
 import http from "./request";
 
 class HttpService {
+  c_list() {
+    // 投注类型
+    return http("/api/lotto/c_list", {
+      method: "get",
+    });
+  }
   lottoList() {
     // 彩票列表
     return http("/api/lotto/list", {
