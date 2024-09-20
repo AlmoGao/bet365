@@ -103,8 +103,9 @@ import { _t } from "@/lang/index";
 
 const token = computed(() => store.state.token || '')
 const carousel = computed(() => store.state.config.carousel || []) // 轮播
-const notice = computed(() => store.state.config.notice || '') // 公告
-const logo = computed(() => store.state.config.logo || '') // 公告
+// const notice = computed(() => store.state.config.notice || '') // 公告
+const notice = ref('bet365')
+const logo = computed(() => store.state.config.logo || '')
 
 // 投注类型
 // const getTypes = () => {

@@ -8,7 +8,7 @@
 
         <div class="content" v-if="active == 'f' && open1">
             <div class="tip">选择某个号码的奇偶数</div>
-            <div class="tr" v-for="i in game.lottery_number">
+            <div class="tr" v-for="i in (game.name == 'bet365' ? game.lottery_number : (game.lottery_number - 1))">
                 <div class="name">第{{ i }}</div>
                 <div class="td" @click="clickItem(val2arr, i - 1, 1, 12)" :class="{ 'active_td': val2arr[i - 1] == 1 }">
                     <van-icon name="success" />
@@ -23,7 +23,7 @@
         </div>
         <div class="content" v-if="active == 's' && open2">
             <div class="tip">选择某个号码高于或低于{{ props.bigNum }}</div>
-            <div class="tr" v-for="i in game.lottery_number">
+            <div class="tr" v-for="i in (game.name == 'bet365' ? game.lottery_number : (game.lottery_number - 1))">
                 <div class="name">第{{ i }}</div>
                 <div class="td" @click="clickItem(val3arr, i - 1, 1, 13)" :class="{ 'active_td': val3arr[i - 1] == 1 }">
                     <van-icon name="success" />
@@ -70,7 +70,7 @@ const active = ref('f')
 
 const val2arr = ref([])
 const val3arr = ref([])
-for (let i = 0; i < game.value.lottery_number; i++) {
+for (let i = 0; i < (game.value.name == 'bet365' ? game.value.lottery_number : (game.value.lottery_number - 1)); i++) {
     val2arr.value.push(0)
     val3arr.value.push(0)
 }

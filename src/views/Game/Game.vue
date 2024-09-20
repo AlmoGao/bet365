@@ -69,7 +69,7 @@
                 <div v-if="[11].includes(preItem.code)" style="display: flex;flex-wrap: wrap;align-items: center;">
                     <div v-for="(item, i) in preItem.key" :key="i" style="margin:0 2rem 1rem 0;;align-items: center;"
                         :style="{ display: item ? 'flex' : 'none' }">
-                        <div>第{{ i + 1 }} </div>
+                        <div>第{{ i }} </div>
                         <div style="width:4rem;height:4rem;border-radius: 50%;margin:0 1rem"
                             :style="{ backgroundColor: colorMap[item] }"></div>
                         <span>{{ colorTextMap[item] }}</span>
@@ -203,7 +203,7 @@
                         </div>
                         <div style="display: flex;align-items: center;justify-content: space-between;">
                             <div style="display: flex;flex-wrap: wrap;align-items: center;padding:0 4rem">
-                                <div style="margin:0 2rem 1rem 0;" :style="{ display: item ? 'block' : 'none' }"
+                                <div style="margin:0 2rem 1rem 0;" :style="{ display: t ? 'block' : 'none' }"
                                     v-for="(t, i) in item.key" :key="i">第{{ i + 1 }} {{ t ==
                                         1 ? '25及高于' : '低于25' }}</div>
                             </div>
@@ -260,7 +260,7 @@
                                 <div v-for="(t, i) in item.key" :key="i"
                                     style="margin:0 2rem 1rem 0;;align-items: center;"
                                     :style="{ display: t ? 'flex' : 'none' }">
-                                    <div>第{{ i + 1 }} </div>
+                                    <div>第{{ i }} </div>
                                     <div style="width:4rem;height:4rem;border-radius: 50%;margin:0 1rem"
                                         :style="{ backgroundColor: colorMap[t] }"></div>
                                     <span>{{ colorTextMap[t] }}</span>
@@ -298,7 +298,7 @@
                             <div style="text-align: right;padding-right:4rem" v-if="item.amount">
                                 <div>本金 {{ item.amount * item.key.length }}</div>
                                 <div>预期返还</div>
-                                <div>{{ item.amount * item.p * item.key.length }}</div>
+                                <div>{{ item.amount * item.p }}</div>
                             </div>
                         </div>
 
@@ -384,7 +384,8 @@
 
                             <div v-if="item.amount1" style="width: 100%;text-align: right;padding: 4rem;">
                                 <div>本金 {{ item.amount1 * combination(item.key.length, 1) }}</div>
-                                <div>预期返还 {{ item.amount1 * combination(item.key.length, 1) * getGroupP(1, item.special)
+                                <div>预期返还 {{ item.amount1 * (item.special ? game.lottery_number : game.lottery_number -
+                                    1) * getGroupP(1, item.special)
                                     }}</div>
                             </div>
                         </div>
@@ -405,7 +406,8 @@
 
                             <div v-if="item.amount2" style="width: 100%;text-align: right;padding: 4rem;">
                                 <div>本金 {{ item.amount2 * combination(item.key.length, 2) }}</div>
-                                <div>预期返还 {{ item.amount2 * combination(item.key.length, 2) * getGroupP(2, item.special)
+                                <div>预期返还 {{ item.amount2 * (item.special ? game.lottery_number : game.lottery_number -
+                                    1) * getGroupP(2, item.special)
                                     }}</div>
                             </div>
                         </div>
@@ -422,7 +424,8 @@
 
                             <div v-if="item.amount3" style="width: 100%;text-align: right;padding: 4rem;">
                                 <div>本金 {{ item.amount3 * combination(item.key.length, 3) }}</div>
-                                <div>预期返还 {{ item.amount3 * combination(item.key.length, 3) * getGroupP(3, item.special)
+                                <div>预期返还 {{ item.amount3 * (item.special ? game.lottery_number : game.lottery_number -
+                                    1) * getGroupP(3, item.special)
                                     }}</div>
                             </div>
                         </div>
@@ -439,7 +442,8 @@
 
                             <div v-if="item.amount4" style="width: 100%;text-align: right;padding: 4rem;">
                                 <div>本金 {{ item.amount4 * combination(item.key.length, 4) }}</div>
-                                <div>预期返还 {{ item.amount4 * combination(item.key.length, 4) * getGroupP(4, item.special)
+                                <div>预期返还 {{ item.amount4 * (item.special ? game.lottery_number : game.lottery_number -
+                                    1) * getGroupP(4, item.special)
                                     }}</div>
                             </div>
                         </div>
@@ -456,7 +460,8 @@
 
                             <div v-if="item.amount5" style="width: 100%;text-align: right;padding: 4rem;">
                                 <div>本金 {{ item.amount5 * combination(item.key.length, 5) }}</div>
-                                <div>预期返还 {{ item.amount5 * combination(item.key.length, 5) * getGroupP(5, item.special)
+                                <div>预期返还 {{ item.amount5 * (item.special ? game.lottery_number : game.lottery_number -
+                                    1) * getGroupP(5, item.special)
                                     }}</div>
                             </div>
                         </div>
@@ -488,6 +493,8 @@ import http from "@/api/index"
 import store from "@/store"
 import { showToast } from "vant"
 
+
+store.dispatch('updateUser')
 
 const getColor = (num) => {
     let color = 'grey'
@@ -523,7 +530,7 @@ const allBet = computed(() => {
         if ([15, 10].includes(item.code)) { // 特别号码/第一个号码
             if (item.amount && item.amount > 0) {
                 all += item.amount * item.key.length
-                all2 += item.amount * item.key.length * item.p
+                all2 += item.amount * item.p
             }
         } else if ([9].includes(item.code)) { // 单式投注
             if (item.amount) {
@@ -533,23 +540,23 @@ const allBet = computed(() => {
         } else if ([14].includes(item.code)) { // 组合投注
             if (item.amount1) {
                 all += (item.amount1 * combination(item.key.length, 1))
-                all2 += (item.amount1 * combination(item.key.length, 1)) * getGroupP(1, item.special)
+                all2 += (item.amount1 * (item.special ? game.value.lottery_number : game.value.lottery_number - 1)) * getGroupP(1, item.special)
             }
             if (item.amount2) {
                 all += (item.amount2 * combination(item.key.length, 2))
-                all2 += (item.amount2 * combination(item.key.length, 2)) * getGroupP(2, item.special)
+                all2 += (item.amount2 * (item.special ? game.value.lottery_number : game.value.lottery_number - 1)) * getGroupP(2, item.special)
             }
             if (item.amount3) {
                 all += (item.amount3 * combination(item.key.length, 3))
-                all2 += (item.amount3 * combination(item.key.length, 3)) * getGroupP(3, item.special)
+                all2 += (item.amount3 * (item.special ? game.value.lottery_number : game.value.lottery_number - 1)) * getGroupP(3, item.special)
             }
             if (item.amount4) {
                 all += (item.amount4 * combination(item.key.length, 4))
-                all2 += (item.amount4 * combination(item.key.length, 4)) * getGroupP(4, item.special)
+                all2 += (item.amount4 * (item.special ? game.value.lottery_number : game.value.lottery_number - 1)) * getGroupP(4, item.special)
             }
             if (item.amount5) {
                 all += (item.amount5 * combination(item.key.length, 5))
-                all2 += (item.amount5 * combination(item.key.length, 5)) * getGroupP(5, item.special)
+                all2 += (item.amount5 * (item.special ? game.value.lottery_number : game.value.lottery_number - 1)) * getGroupP(5, item.special)
             }
         } else {
             if (item.amount) {
@@ -580,12 +587,17 @@ const goBet = () => {
                 betList.value.forEach(item => {
                     if ([15, 10].includes(item.code)) { // 特别号码/第一个号码
                         if (item.amount && item.amount > 0) {
-                            item.amount += item.amount * item.key.length
-                            list.push(item)
+                            item.key.forEach(a => {
+                                const obj = JSON.parse(JSON.stringify(item))
+                                list.push({
+                                    ...obj,
+                                    key: a
+                                })
+                            })
                         }
                     } else if ([9].includes(item.code)) { // 单式投注
                         if (item.amount) {
-                            item.amount += (item.times ? item.times * item.amount : item.amount)
+                            item.amount = (item.times ? item.times * item.amount : item.amount)
                             list.push(item)
                         }
                     } else if ([14].includes(item.code)) { // 组合投注
@@ -720,7 +732,6 @@ const getInfo = () => {
                 try { config.value.other_json = JSON.parse(res.other_json) } catch { }
             }
         }
-        console.error('----->', config.value)
     })
 }
 getInfo()

@@ -15,7 +15,8 @@
                     }}
                 </div>
             </div>
-            <div class="box" v-for="i in game.lottery_number" :key="i">
+            <div class="box" v-for="i in (game.name == 'bet365' ? game.lottery_number : (game.lottery_number - 1))"
+                :key="i">
                 <div class="name">第{{ i }}</div>
                 <div @click="clickItem(i, key)" class="box_c" v-for="(val, key) in props.config.number_json" :key="key"
                     :style="{ border: `1px solid ${colorMap[key]}`, backgroundColor: curr[i] == key ? colorMap[key] : '', marginLeft: `${8 - Object.keys(props.config.number_json).length}rem` }">

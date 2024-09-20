@@ -89,6 +89,11 @@ const routes = [
         name: 'auth2',
         component: () => import('../views/My/Auth2.vue')
       },
+      { // 初级认证
+        path: '/auth3',
+        name: 'auth3',
+        component: () => import('../views/My/Auth3.vue')
+      },
       { // 投注页
         path: '/game',
         name: 'game',

@@ -1,24 +1,27 @@
 <!-- 初级认证 -->
 <template>
     <div class="page-auth1">
-        <Top :title="'提现'" />
+        <Top :title="'钱包'" />
 
 
-        <div class="tip">余额：{{ userInfo.money }}</div>
+        <!-- <div class="tip">为了保障账户安全体验，请您绑定个人身份信息</div> -->
 
         <div class="form">
             <div class="subtitle">类型：</div>
-            <div class="item">
-                <div class="tab" :class="{ 'active_tab': form.type == 1 }" @click="form.type = 1">银行卡</div>
-                <div class="tab" :class="{ 'active_tab': form.type == 2 }" @click="form.type = 2">钱包</div>
+            <div class="item" v-if="!userInfo.wallet?.address">
+                <div class="tab" :class="{ 'active_tab': form.type == 1 }" @click="form.type = 1">Trc20</div>
+                <div class="tab" :class="{ 'active_tab': form.type == 2 }" @click="form.type = 2">Erc20</div>
             </div>
-            <div class="subtitle">金额：</div>
+            <div class="item" v-if="userInfo.wallet?.address">
+                <div class="tab active_tab">{{ userInfo.wallet.type == 1 ? 'Trc20' : 'Erc20' }}</div>
+            </div>
+            <div class="subtitle">地址：</div>
             <div class="item">
-                <input v-model="form.amount" :type="'number'" :placeholder="_t('ipt')" class="ipt">
+                <input v-model="form.address" :type="'text'" :placeholder="_t('ipt')" class="ipt">
             </div>
 
-            <van-button class="btn" type="primary" size="large" :loading="loading" @click="submit">{{ _t('t56')
-                }}</van-button>
+            <van-button v-if="!userInfo.wallet?.address" class="btn" type="primary" size="large" :loading="loading"
+                @click="submit">{{ _t('t56') }}</van-button>
         </div>
     </div>
 </template>
@@ -36,21 +39,16 @@ const userInfo = computed(() => store.state.userInfo || {})
 store.dispatch('updateUser')
 
 const form = ref({
-    type: 1, // 1-银行卡 2-钱包
-    amount: '',
+    type: userInfo.value.wallet?.type || 1, // 1-trc20 2-erc20
+    address: userInfo.value.wallet?.address || '',
 })
 
 const loading = ref(false)
 const submit = () => {
-    if (!form.value.amount) return showToast('请输入金额')
-    if (form.value.type == 1 && !userInfo.value.bank?.bank_name) return showToast('请先绑定银行卡')
-    if (form.value.type == 2 && !userInfo.value.wallet?.address) return showToast('请先绑定钱包')
+    if (!form.value.address) return showToast('请输入地址')
     if (loading.value) return
     loading.value = true
-    http.withdraw({
-        ...form.value,
-        ba_id: form.value.type == 1 ? userInfo.value.bank.id : userInfo.value.wallet.id
-    }).then(res => {
+    http.bindWallet(form.value).then(res => {
         if (res.code == 1) {
             showToast(_t("t60"))
             router.back()

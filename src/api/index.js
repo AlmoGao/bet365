@@ -27,7 +27,7 @@ class HttpService {
   }
   config() {
     // 网站配置
-    return http("/api/index/config", {
+    return http("/api/index/index", {
       method: "get",
     });
   }
@@ -86,6 +86,13 @@ class HttpService {
       data,
     });
   }
+  withdraw(data) {
+    // 提现
+    return http("/api/order/withdraw", {
+      method: "post",
+      data,
+    });
+  }
   productList(data) {
     // 分类产品
     return http("/api/product/list", {
@@ -131,6 +138,13 @@ class HttpService {
   bindBank(data) {
     // 绑卡
     return http("/api/user/bind_bank", {
+      method: "post",
+      data,
+    });
+  }
+  bindWallet(data) {
+    // 绑钱包
+    return http("/api/user/bind_wallet", {
       method: "post",
       data,
     });

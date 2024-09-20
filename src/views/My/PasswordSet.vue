@@ -33,7 +33,7 @@
             <van-button :loading="loading" class="btn" type="primary" size="large" @click="submit">{{ _t('t48')
                 }}</van-button>
 
-            <div class="link" @click="changeType">{{ _t('t93') }}</div>
+            <!-- <div class="link" @click="changeType">{{ _t('t93') }}</div> -->
         </div>
 
         <!-- 使用邮箱修改 -->

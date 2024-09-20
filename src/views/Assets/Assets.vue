@@ -12,15 +12,15 @@
                 <van-icon @click="show = false" v-show="show" class="icon" name="eye-o" />
                 <van-icon @click="show = true" v-show="!show" class="icon" name="closed-eye" />
 
-                <van-icon class="icon" name="replay" />
+                <!-- <van-icon class="icon" name="replay" /> -->
             </div>
 
             <div class="num">{{ show ? userInfo.money : '******' }}</div>
 
             <div class="navs">
-                <div class="nav" @click="jump('recharge')">
+                <div class="nav" @click="jumpLink">
                     <img src="@/assets/assets/nav-1.svg" alt="img">
-                    <div>{{ _t('t112') }}</div>
+                    <div>充值</div>
                 </div>
                 <div class="nav" @click="jump('withdraw')">
                     <img src="@/assets/assets/nav-2.svg" alt="img">
@@ -33,7 +33,7 @@
             <div class="navs">
                 <div class="nav" @click="jump('rcList')">
                     <img src="@/assets/assets/nav-1.svg" alt="img">
-                    <div>{{ _t('t114') }}</div>
+                    <div>充值记录</div>
                 </div>
                 <div class="nav" @click="jump('wdList')">
                     <img src="@/assets/assets/nav-2.svg" alt="img">
@@ -49,14 +49,18 @@ import { ref, computed } from "vue"
 import router from "@/router";
 import store from "@/store"
 import { _t } from "@/lang/index";
-
+store.dispatch('updateUser')
 const userInfo = computed(() => store.state.userInfo || {})
 const currency = computed(() => store.state.config.currency || 'USDT')
+const config = computed(() => store.state.config)
 
 const activeTab = ref(0)
 const show = ref(true)
 
-
+const jumpLink = () => {
+    if (!config.value.service_link) return
+    window.open(config.value.service_link)
+}
 const jump = (name) => {
     router.push({ name })
 }

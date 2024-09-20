@@ -8,31 +8,31 @@
 
          <div class="info">
             <div class="title">
-               <span>UID: {{ userInfo.id }}</span>
-               <img class="copy" src="@/assets/my/copy.svg" alt="img">
+               <span>{{ userInfo.username }}</span>
+               <!-- <img class="copy" src="@/assets/my/copy.svg" alt="img"> -->
             </div>
-            <div>{{ _t('t75') }}：{{ userInfo.score }}</div>
+            <div>余额：{{ userInfo.money }}</div>
          </div>
       </div>
 
       <!-- 快捷入口 -->
       <div class="subtitle">{{ _t('t76') }}</div>
       <div class="tabs">
-         <div class="tab" @click="jump('passwordSet')">
+         <!-- <div class="tab" @click="jump('passwordSet')">
             <img src="@/assets/my/tab1.png" alt="img">
             <div>{{ _t('t77') }}</div>
-         </div>
-         <div class="tab" @click="jump('emailSet')">
+         </div> -->
+         <!-- <div class="tab" @click="jump('emailSet')">
             <img src="@/assets/my/tab2.png" alt="img">
             <div>{{ _t('t78') }}</div>
-         </div>
+         </div> -->
          <div class="tab" @click="jump('auth1')">
             <img src="@/assets/my/tab3.png" alt="img">
             <div>{{ _t('t79') }}</div>
          </div>
-         <div class="tab" @click="goAuth">
+         <div class="tab" @click="jump('auth3')">
             <img src="@/assets/my/tab4.png" alt="img">
-            <div>{{ _t('t80') }}</div>
+            <div>钱包</div>
          </div>
       </div>
       <!-- 通用 -->
@@ -40,30 +40,30 @@
       <div class="navs">
          <div class="nav" @click="goHis">
             <img src="@/assets/my/nav1.jpeg" alt="img">
-            <div class="info">{{ _t('t82') }}</div>
+            <div class="info">历史记录</div>
             <van-icon name="arrow" />
          </div>
-         <div class="nav" @click="goAuth">
+         <!-- <div class="nav" @click="goAuth">
             <img src="@/assets/my/avatar.svg" alt="img">
             <div class="info">{{ _t('t83') }}</div>
             <van-icon name="arrow" />
-         </div>
-         <div class="nav" @click="jump('safePassword')">
+         </div> -->
+         <!-- <div class="nav" @click="jump('safePassword')">
             <img src="@/assets/my/nav3.jpg" alt="img">
             <div class="info">{{ _t('t84') }}</div>
             <van-icon name="arrow" />
-         </div>
+         </div> -->
          <!-- <div class="nav">
             <img src="@/assets/my/nav4.jpg" alt="img">
             <div class="info">白皮书</div>
             <van-icon name="arrow" />
          </div> -->
-         <div class="nav" @click="jump('lang')">
+         <!-- <div class="nav" @click="jump('lang')">
             <img src="@/assets/my/nav5.jpg" alt="img">
             <div class="info">{{ _t('lang') }}</div>
             <van-icon name="arrow" />
-         </div>
-         <div class="nav" @click="goCustomer" style="padding-bottom:8rem;border-bottom:1px solid #e5e5e5">
+         </div> -->
+         <div class="nav" @click="jumpLink" style="padding-bottom:8rem;border-bottom:1px solid #e5e5e5">
             <img src="@/assets/my/nav6.jpg" alt="img">
             <div class="info">{{ _t('t85') }}</div>
             <van-icon name="arrow" />
@@ -87,6 +87,13 @@ import defaultAvatar from "@/assets/my/avatar.svg"
 import { _t } from "@/lang/index";
 
 const userInfo = computed(() => store.state.userInfo || {})
+const config = computed(() => store.state.config)
+
+const jumpLink = () => {
+   if (!config.value.service_link) return
+   window.open(config.value.service_link)
+}
+
 store.dispatch('updateUser')
 const jump = name => {
    router.push({ name })
