@@ -13,7 +13,7 @@
                     </div>
 
                     <div class="numbers">
-                        <div @click="clickItem(i, 21)" class="number"
+                        <div @click="clickItem(i, 9)" class="number"
                             :style="{ border: `1px solid ${getColor(i)}`, backgroundColor: bets.includes(i) ? getColor(i) : '' }"
                             v-for="i in props.numbers">
                             {{ i }}</div>
@@ -70,7 +70,7 @@
 
 
     <!-- 赔率提示 -->
-    <van-overlay z-index="100" teleport="body" :show="show" @click="show = false">
+    <van-overlay z-index="100" teleport="body" :show="show">
         <div class="bet_wrapper" @click="show = false">
             <!-- 365 -->
             <div class="table" @click.stop v-if="game.name == 'bet365'">
@@ -212,6 +212,10 @@ const props = defineProps({
     config: {
         type: Object,
         default: () => { }
+    },
+    bigNum: {
+        type: Number,
+        default: 0
     }
 })
 
@@ -260,7 +264,7 @@ const clickItem = (i, key) => {
             emits('preBet', {})
         }
     }
-    if (key == 21) { // 单式
+    if (key == 9) { // 单式
         if (bets.value.includes(i)) {
             bets.value = bets.value.filter(a => a != i)
         } else {

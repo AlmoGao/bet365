@@ -11,6 +11,7 @@ export default createStore({
     currGame: {},
     types: [],
     typeMap: {
+      9: '单式投注',
       10: '第1个号码',
       11: '球的颜色', // 球的颜色(一个或者多个)
       12: '奇数和偶数', // 奇数和偶数(一个或者多个)

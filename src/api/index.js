@@ -43,6 +43,21 @@ class HttpService {
       method: "get",
     });
   }
+
+  game_buy(data) {
+    // 购买彩票
+    return http("/api/order/buy", {
+      method: "post",
+      data,
+    });
+  }
+  game_expect(data) {
+    // 获取期号
+    return http("/api/order/expect", {
+      method: "post",
+      data,
+    });
+  }
   game_payout(data) {
     // 玩法配置
     return http("/api/lotto/game_payout", {

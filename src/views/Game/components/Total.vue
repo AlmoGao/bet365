@@ -37,6 +37,10 @@ const props = defineProps({
     config: {
         type: Object,
         default: () => { }
+    },
+    bigNum: {
+        type: Number,
+        default: 0
     }
 })
 

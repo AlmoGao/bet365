@@ -15,7 +15,7 @@
                     }}
                 </div>
             </div>
-            <div class="box" v-for="i in game.max_number" :key="i">
+            <div class="box" v-for="i in game.lottery_number" :key="i">
                 <div class="name">第{{ i }}</div>
                 <div @click="clickItem(i, key)" class="box_c" v-for="(val, key) in props.config.number_json" :key="key"
                     :style="{ border: `1px solid ${colorMap[key]}`, backgroundColor: curr[i] == key ? colorMap[key] : '', marginLeft: `${8 - Object.keys(props.config.number_json).length}rem` }">
@@ -44,6 +44,10 @@ const props = defineProps({
     config: {
         type: Object,
         default: () => { }
+    },
+    bigNum: {
+        type: Number,
+        default: 0
     }
 })
 

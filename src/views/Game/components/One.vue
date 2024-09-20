@@ -3,8 +3,8 @@
     <div class="bet_one">
         <van-tabs v-model:active="active" shrink>
             <van-tab title="首个摇出号码 奇/偶数" name="f" v-if="open1"></van-tab>
-            <van-tab title="单数或双数" name="s"></van-tab>
-            <van-tab title="猜大小" name="t"></van-tab>
+            <van-tab title="单数或双数" name="s" v-if="open2"></van-tab>
+            <van-tab title="猜大小" name="t" v-if="open3"></van-tab>
         </van-tabs>
 
         <div class="content" v-if="active == 'f' && open1">
@@ -22,9 +22,9 @@
                 </div>
             </div>
         </div>
-        <div class="content" v-if="active == 's'">
+        <div class="content" v-if="active == 's' && open2">
             <div class="tip">选择所有号码的奇偶数</div>
-            <div class="tr" v-for="i in game.max_number">
+            <div class="tr" v-for="i in game.lottery_number">
                 <div class="name">第{{ i }}</div>
                 <div class="td" @click="clickItem(val2arr, i - 1, 1, 18)" :class="{ 'active_td': val2arr[i - 1] == 1 }">
                     <van-icon name="success" />
@@ -37,18 +37,18 @@
                 </div>
             </div>
         </div>
-        <div class="content" v-if="active == 't'">
-            <div class="tip">选择每个号码高于或低于25</div>
-            <div class="tr" v-for="i in game.max_number">
+        <div class="content" v-if="active == 't' && open3">
+            <div class="tip">选择每个号码高于或低于{{ props.bigNum }}</div>
+            <div class="tr" v-for="i in game.lottery_number">
                 <div class="name">第{{ i }}</div>
                 <div class="td" @click="clickItem(val3arr, i - 1, 1, 19)" :class="{ 'active_td': val3arr[i - 1] == 1 }">
                     <van-icon name="success" />
-                    <span>正好或高于25</span>
+                    <span>正好或高于{{ props.bigNum }}</span>
                 </div>
                 <div class="line"></div>
                 <div class="td" @click="clickItem(val3arr, i - 1, 2, 19)" :class="{ 'active_td': val3arr[i - 1] == 2 }">
                     <van-icon name="success" />
-                    <span>低于25</span>
+                    <span>低于{{ props.bigNum }}</span>
                 </div>
             </div>
         </div>
@@ -60,6 +60,9 @@ import { ref, computed } from "vue"
 import store from "@/store"
 
 const open1 = computed(() => !!(props.config.other_json.first_oe))
+const open2 = computed(() => !!(props.config.other_json.oe))
+const open3 = computed(() => !!(props.config.other_json.bs))
+
 
 const emits = defineEmits(['preBet'])
 const game = computed(() => store.state.currGame || {})
@@ -71,6 +74,10 @@ const props = defineProps({
     config: {
         type: Object,
         default: () => { }
+    },
+    bigNum: {
+        type: Number,
+        default: 0
     }
 })
 
@@ -79,7 +86,7 @@ const active = ref('f')
 const val1arr = ref([0])
 const val2arr = ref([])
 const val3arr = ref([])
-for (let i = 0; i < game.value.max_number; i++) {
+for (let i = 0; i < game.value.lottery_number; i++) {
     val2arr.value.push(0)
     val3arr.value.push(0)
 }
@@ -108,7 +115,7 @@ const clickItem = (arr, i, val, key) => {
             emits('preBet', {
                 code: key,
                 key: arr,
-                p: 53
+                p: props.config.other_json.oe
             })
         } else {
             emits('preBet', {})
@@ -119,7 +126,7 @@ const clickItem = (arr, i, val, key) => {
             emits('preBet', {
                 code: key,
                 key: arr,
-                p: 53
+                p: props.config.other_json.bs
             })
         } else {
             emits('preBet', {})

@@ -107,20 +107,23 @@ const notice = computed(() => store.state.config.notice || '') // 公告
 const logo = computed(() => store.state.config.logo || '') // 公告
 
 // 投注类型
-const getTypes = () => {
-  http.c_list().then(res => {
-    console.error('---', res)
-    store.commit('setTypes', res || [])
-  })
-}
-getTypes()
+// const getTypes = () => {
+//   http.c_list().then(res => {
+//     store.commit('setTypes', res || [])
+//   })
+// }
+// getTypes()
 
 
 // 获取分类
 const games = ref([])
+try {
+  games.value = JSON.parse(sessionStorage.getItem('games') || '[]')
+} catch { }
 const getGames = () => {
   http.lottoList().then(res => {
     games.value = res || []
+    sessionStorage.setItem('games', JSON.stringify(res))
   })
 }
 getGames()
@@ -148,7 +151,7 @@ const getMessage = () => {
   })
 }
 if (token.value) {
-  getMessage()
+  // getMessage()
 }
 const confirmMessage = () => {
   showMessage.value = false

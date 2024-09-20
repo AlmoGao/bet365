@@ -8,7 +8,7 @@
 
         <div class="content" v-if="active == 'f' && open1">
             <div class="tip">选择某个号码的奇偶数</div>
-            <div class="tr" v-for="i in game.max_number">
+            <div class="tr" v-for="i in game.lottery_number">
                 <div class="name">第{{ i }}</div>
                 <div class="td" @click="clickItem(val2arr, i - 1, 1, 12)" :class="{ 'active_td': val2arr[i - 1] == 1 }">
                     <van-icon name="success" />
@@ -22,17 +22,17 @@
             </div>
         </div>
         <div class="content" v-if="active == 's' && open2">
-            <div class="tip">选择某个号码高于或低于25</div>
-            <div class="tr" v-for="i in game.max_number">
+            <div class="tip">选择某个号码高于或低于{{ props.bigNum }}</div>
+            <div class="tr" v-for="i in game.lottery_number">
                 <div class="name">第{{ i }}</div>
                 <div class="td" @click="clickItem(val3arr, i - 1, 1, 13)" :class="{ 'active_td': val3arr[i - 1] == 1 }">
                     <van-icon name="success" />
-                    <span>正好或高于25</span>
+                    <span>正好或高于{{ props.bigNum }}</span>
                 </div>
                 <div class="line"></div>
                 <div class="td" @click="clickItem(val3arr, i - 1, 2, 13)" :class="{ 'active_td': val3arr[i - 1] == 2 }">
                     <van-icon name="success" />
-                    <span>低于25</span>
+                    <span>低于{{ props.bigNum }}</span>
                 </div>
             </div>
         </div>
@@ -59,6 +59,10 @@ const props = defineProps({
     config: {
         type: Object,
         default: () => { }
+    },
+    bigNum: {
+        type: Number,
+        default: 0
     }
 })
 
@@ -66,7 +70,7 @@ const active = ref('f')
 
 const val2arr = ref([])
 const val3arr = ref([])
-for (let i = 0; i < game.value.max_number; i++) {
+for (let i = 0; i < game.value.lottery_number; i++) {
     val2arr.value.push(0)
     val3arr.value.push(0)
 }
