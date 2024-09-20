@@ -10,6 +10,7 @@
                     <!-- 号码 -->
                     <Number @preBet="preBet" :numbers="numbers" :config="config" :bigNum="bigNum" />
                     <div class="mid"></div>
+                    <van-loading style="text-align: center;margin-top: 20rem" type="spinner" v-if="infoLoading" />
                     <!-- 球得颜色 -->
                     <BallColor @preBet="preBet" :numbers="numbers" :config="config" :bigNum="bigNum" />
                     <!-- 颜色 -->
@@ -26,7 +27,7 @@
                     <div class="mid"></div>
                 </van-tab>
                 <van-tab title="结果">
-                    <Record />
+                    <Record v-if="active == 1" />
                 </van-tab>
             </van-tabs>
         </div>
@@ -101,7 +102,7 @@
                 </div>
                 <div class="amount">
                     <div>余额</div>
-                    <div class="num">0.00</div>
+                    <div class="num">{{ userInfo.money }}</div>
                 </div>
                 <div class="close" @click="showBottom = false"><van-icon name="arrow-down" /></div>
             </div>
@@ -308,12 +309,14 @@
                         <div class="bet_info">
                             <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
                             <div class="bet_info_name">{{ game.name == 'bet365' ? '选5' : typeMap[item.code] }}</div>
-                            <div class="bet_info_per">{{ item.p }}</div>
+                            <div class="bet_info_per">{{ item.special ? item.p2 : item.p }}</div>
                             <div class="bet_ipt_box">
                                 <span>{{ item.times ? item.times + 'X' : '' }}</span>
                                 <input type="number" v-model="item.amount" class="bet_ipt" placeholder="本金">
                             </div>
                         </div>
+
+
 
                         <div style="display: flex;align-items: center;justify-content: space-between;">
                             <div style="display: flex;flex-wrap: wrap;align-items: center;padding: 0 4rem">
@@ -325,7 +328,8 @@
                             <div style="text-align: right;padding-right:4rem" v-if="item.amount">
                                 <div>本金 {{ item.times ? item.times * item.amount : item.amount }}</div>
                                 <div>预期返还</div>
-                                <div>{{ item.times ? item.times * item.amount * item.p : item.amount * item.p }}</div>
+                                <div>{{ item.times ? item.times * item.amount * (item.special ? item.p2 : item.p) :
+                                    item.amount * (item.special ? item.p2 : item.p) }}</div>
                             </div>
 
                         </div>
@@ -349,9 +353,9 @@
                             </div>
                         </div>
                         <!-- 非365 -->
-                        <!-- <div style="padding: 2rem 4rem;" v-else>
+                        <div style="padding: 2rem 4rem;" v-else>
                             <van-checkbox v-model="item.special" shape="square">包括特别号码</van-checkbox>
-                        </div> -->
+                        </div>
                     </div>
                     <!-- 组合投注 -->
                     <div class="bet_item" v-if="[14].includes(item.code)">
@@ -470,7 +474,8 @@
 
                 </template>
             </div>
-            <div class="bet_bottom" @click="goBet" :style="{ opacity: allBet[0] ? (loading ? '0.5' : '1') : '0.5' }">
+            <div class="bet_bottom" @click="goBet"
+                :style="{ opacity: (allBet[0] && allBet[0] * 1 > 0) ? (loading ? '0.5' : '1') : '0.5' }">
                 <div>投注 {{ allBet[0] }}</div>
                 <div class="return" v-if="allBet[1]">预期返还 {{ allBet[1] }}</div>
             </div>
@@ -495,6 +500,7 @@ import { showToast } from "vant"
 
 
 store.dispatch('updateUser')
+const userInfo = computed(() => store.state.userInfo || {})
 
 const getColor = (num) => {
     let color = 'grey'
@@ -535,7 +541,7 @@ const allBet = computed(() => {
         } else if ([9].includes(item.code)) { // 单式投注
             if (item.amount) {
                 all += (item.times ? item.times * item.amount : item.amount)
-                all2 += (item.times ? item.times * item.amount : item.amount) * item.p
+                all2 += (item.times ? item.times * item.amount : item.amount) * (item.special ? item.p2 : item.p)
             }
         } else if ([14].includes(item.code)) { // 组合投注
             if (item.amount1) {
@@ -574,8 +580,9 @@ const removeItem = i => {
     }
 }
 const goBet = () => {
-    if (!allBet.value) return
+    if (!allBet.value[0] || allBet.value[0] * 1 < 0) return
     if (loading.value) return
+    if ((userInfo.value.money * 1) < (allBet.value[0] * 1)) return showToast('余额不足')
     loading.value = true
     http.game_expect({
         lotto_id: game.value.id
@@ -652,6 +659,7 @@ const goBet = () => {
                         showBottom.value = false
                         betList.value = []
                         showToast('投注成功')
+                        store.dispatch('updateUser')
                     } else {
                         showToast(res.msg)
                     }
@@ -692,7 +700,9 @@ const config = ref({
     yanse_json: {}, // 颜色
     other_json: {}, // 其他
 })
+const infoLoading = ref(false)
 const getInfo = () => {
+    infoLoading.value = true
     http.game_payout({
         lotto_id: game.value.id
     }).then(res => {
@@ -732,6 +742,8 @@ const getInfo = () => {
                 try { config.value.other_json = JSON.parse(res.other_json) } catch { }
             }
         }
+    }).finally(() => {
+        infoLoading.value = false
     })
 }
 getInfo()

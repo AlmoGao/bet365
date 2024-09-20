@@ -2,25 +2,49 @@
 <template>
     <div class="bet_his">
 
-        <div class="title">
-            <span>号码大小</span>
-            <!-- <span>摇奖次序</span> -->
-            <van-icon name="arrow-down" />
-        </div>
-
         <div class="list">
-            <div class="item" v-for="i in 50" :key="i">
+            <van-loading style="text-align: center;margin-top: 20rem" type="spinner" v-if="loading" />
+            <div class="item" v-for="(item, i) in list" :key="i">
                 <div class="left">
-                    <div>星期一 16 9月 23:49</div>
-                    <div>摇奖次序 2</div>
+                    <div>{{ item.lotterytime_text }}</div>
+                    <div>{{ item.expect }}</div>
                 </div>
                 <div class="right">
-                    <div class="ball" v-for="i in 7">{{ i }}</div>
+                    <div class="ball" v-for="(val, key) in getRs(item)" :key="i + '_' + key">{{ val }}</div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
+<script setup>
+import http from "@/api/index"
+import { ref, computed } from "vue"
+import store from "@/store";
+
+const game = computed(() => store.state.currGame || {})
+const list = ref()
+const loading = ref(false)
+const getList = () => {
+    loading.value = true
+    http.lottery_results({
+        lotto_id: game.value.id
+    }).then(res => {
+        list.value = res || []
+    }).finally(() => {
+        loading.value = false
+    })
+}
+getList()
+
+const getRs = item => {
+    let obj = {}
+    try {
+        obj = JSON.parse(item.result_json)
+    } catch { }
+    return obj
+}
+</script>
 
 <style lang="less" scoped>
 .bet_his {

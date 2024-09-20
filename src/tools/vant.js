@@ -1,9 +1,10 @@
-import { Checkbox, Overlay, Empty, Tabs, Tab, Popup, Picker, Circle, Notify, CountDown, Image as VanImage, Progress, Swipe, SwipeItem, Field, Button, NoticeBar, Icon, Dialog, Popover, ActionSheet } from 'vant';
+import { Loading, Checkbox, Overlay, Empty, Tabs, Tab, Popup, Picker, Circle, Notify, CountDown, Image as VanImage, Progress, Swipe, SwipeItem, Field, Button, NoticeBar, Icon, Dialog, Popover, ActionSheet } from 'vant';
 
 import 'vant/lib/index.css';
 
 
 export default app => {
+    app.use(Loading);
     app.use(Checkbox);
     app.use(Overlay);
     app.use(Empty);

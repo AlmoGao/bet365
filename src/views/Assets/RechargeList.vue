@@ -3,7 +3,7 @@
     <div class="page-rc_list">
         <Top :title="'充值记录'" />
 
-        <van-tabs v-model:active="activeTab" animated>
+        <!-- <van-tabs v-model:active="activeTab" animated>
             <van-tab title="全部" name="all">
             </van-tab>
             <van-tab title="审核" name="0">
@@ -12,9 +12,9 @@
             </van-tab>
             <van-tab title="失败" name="2">
             </van-tab>
-        </van-tabs>
+        </van-tabs> -->
 
-        <div class="list" v-for="(item, i) in showList" :key="i">
+        <div class="list" v-for="(item, i) in list" :key="i">
             <div class="item">
                 <!-- <div class="top">
                     <img class="icon" v-if="item.image" :src="item.image" alt="img">
@@ -23,11 +23,7 @@
                 </div> -->
                 <div class="item_box">
                     <span>金额</span>
-                    <span class="num">{{ item.amount || '--' }}</span>
-                </div>
-                <div class="item_box">
-                    <span>状态</span>
-                    <span class="status">{{ statusMap[item.status] || '--' }}</span>
+                    <span class="num">+{{ item.money || '--' }}</span>
                 </div>
                 <div class="item_box">
                     <span>时间</span>
@@ -35,7 +31,7 @@
                 </div>
             </div>
         </div>
-        <van-empty v-if="!showList.length" />
+        <van-empty v-if="!list.length" />
     </div>
 </template>
 
@@ -46,26 +42,15 @@ import router from '@/router';
 import http from "@/api"
 import { parseTime } from "@/tools/utils"
 
-const activeTab = ref('all')
 const statusMap = ref({
     0: '待审核',
     1: '成功',
     2: '失败'
 })
 
-const jump = item => {
-    router.push({
-        name: 'info'
-    })
-}
-
 const list = ref([])
-const showList = computed(() => {
-    if (activeTab.value == 'all') return list.value
-    return list.value.filter(item => item.status == activeTab.value) || []
-})
 const getList = () => {
-    http.rechargeList({ status: 'all' }).then(res => {
+    http.rechargeList().then(res => {
         list.value = res || []
     })
 }

@@ -39,6 +39,11 @@ const routes = [
         name: 'wdList',
         component: () => import('../views/Assets/WithdrawList.vue')
       },
+      { // 提现记录
+        path: '/hisory',
+        name: 'hisory',
+        component: () => import('../views/Assets/History.vue')
+      },
       { // 充值
         path: '/recharge',
         name: 'recharge',

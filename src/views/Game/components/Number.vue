@@ -274,6 +274,7 @@ const clickItem = (i, key) => {
 
         if (bets.value.length) {
             let p = 1
+            let p2 = 1
             if (game.value.name == 'bet365') { // 365
                 const key = `${bets.value.length}-${bets.value.length}`
                 p = props.config.single_json[key]
@@ -281,12 +282,15 @@ const clickItem = (i, key) => {
                 const key = bets.value.length
                 const arr = props.config.single_json[key].split('/')
                 p = (Number(arr[0]) + Number(arr[1])) / Number(arr[1])
+                const arr2 = props.config.special_json[key].split('/')
+                p2 = (Number(arr2[0]) + Number(arr2[1])) / Number(arr2[1])
             }
 
             emits('preBet', {
                 code: key,
                 key: bets.value,
-                p: p
+                p: p,
+                p2: p2,
             })
         } else {
             emits('preBet', {})

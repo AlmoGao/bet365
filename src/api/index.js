@@ -1,6 +1,13 @@
 import http from "./request";
 
 class HttpService {
+  lottery_results(data) {
+    // 提现
+    return http("/api/lotto/lottery_results", {
+      method: "post",
+      data,
+    });
+  }
   c_list() {
     // 投注类型
     return http("/api/lotto/c_list", {
@@ -149,16 +156,23 @@ class HttpService {
       data,
     });
   }
+  betList(data) {
+    // 投注记录
+    return http("/api/order/order_log", {
+      method: "post",
+      data,
+    });
+  }
   rechargeList(data) {
     // 充值记录
-    return http("/api/order/recharge_list", {
+    return http("/api/order/recharge_log", {
       method: "post",
       data,
     });
   }
   withdrawalList(data) {
     // 提现记录
-    return http("/api/order/withdrawal_list", {
+    return http("/api/order/withdraw_log", {
       method: "post",
       data,
     });

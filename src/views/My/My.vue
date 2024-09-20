@@ -38,7 +38,7 @@
       <!-- 通用 -->
       <div class="subtitle">{{ _t('t81') }}</div>
       <div class="navs">
-         <div class="nav" @click="goHis">
+         <div class="nav" @click="jump('hisory')">
             <img src="@/assets/my/nav1.jpeg" alt="img">
             <div class="info">历史记录</div>
             <van-icon name="arrow" />
@@ -124,14 +124,6 @@ const loginout = () => {
 }
 
 
-const goHis = () => {
-   router.push({
-      name: 'trade',
-      query: {
-         activeTab: 2
-      }
-   })
-}
 
 const goCustomer = () => {
    store.dispatch('goCustomer')
