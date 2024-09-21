@@ -53,7 +53,7 @@
                         <div v-for="(item, i) in (item.bet_content.split(','))" :key="i"
                             style="margin:0 2rem 1rem 0;;align-items: center;"
                             :style="{ display: item ? 'flex' : 'none' }">
-                            <div>第{{ i }} </div>
+                            <div>第{{ i + 1 }} </div>
                             <div style="width:4rem;height:4rem;border-radius: 50%;margin:0 1rem"
                                 :style="{ backgroundColor: colorMap[item] || '#999' }"></div>
                             <span>{{ colorTextMap[item] }}</span>
