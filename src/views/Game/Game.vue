@@ -665,6 +665,13 @@ const goBet = () => {
                             it.winning_return = (item.amount5 * Math.min(item.key.length, (item.special ? game.value.lottery_number : game.value.lottery_number - 1))) * getGroupP(5, item.special)
                             list.push(it)
                         }
+                    } else if ([11].includes(item.code)) { // 球的颜色
+                        if (item.amount) {
+                            item.key.shift() // 去掉第一个空元素
+
+                            item.winning_return = item.amount * item.p
+                            list.push(item)
+                        }
                     } else {
                         if (item.amount) {
                             item.winning_return = item.amount * item.p
