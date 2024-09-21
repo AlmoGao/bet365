@@ -11,7 +11,7 @@
                <span>{{ userInfo.username }}</span>
                <!-- <img class="copy" src="@/assets/my/copy.svg" alt="img"> -->
             </div>
-            <div>余额：{{ userInfo.money }}</div>
+            <div>余额：{{ (config.currency || '') + ' ' + userInfo.money }}</div>
          </div>
       </div>
 

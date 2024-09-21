@@ -28,6 +28,7 @@ export default createStore({
       23: '三式投注',
       24: '4串1',
       25: '5串1',
+      29: '总和-大小单双'
     }
   },
   mutations: {

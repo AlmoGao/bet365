@@ -25,7 +25,7 @@
                 <div class="content">
                     <span>{{ typeMap[item.category_id] }} </span>
                     <!-- 总和 -->
-                    <div v-if="item.category_id == 20">
+                    <div v-if="[20, 29].includes(item.category_id)">
                         {{ item.bet_content }}
                     </div>
                     <!-- 奇数/偶  -->

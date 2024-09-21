@@ -12,6 +12,12 @@
                 <div class="right">
                     <div class="ball" v-for="(val, key) in getRs(item)" :key="i + '_' + key">{{ val }}</div>
                 </div>
+
+                <!-- 总结 -->
+                <div class="totals" v-if="game.name == 'bet365'">
+                    <div class="total">{{ item.bs }}</div>
+                    <div class="total">{{ item.oe }}</div>
+                </div>
             </div>
         </div>
     </div>
@@ -58,6 +64,7 @@ const getRs = item => {
     .list {
         .item {
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             padding: 2rem 0;
             border-top: 1px solid #e5e5e5;
@@ -83,6 +90,18 @@ const getRs = item => {
                     justify-content: center;
                     border-radius: 50%;
                     background-color: #eee;
+                }
+            }
+
+            .totals {
+                display: flex;
+                width: 100%;
+                align-items: center;
+                justify-content: flex-end;
+                padding: 2rem 4rem;
+
+                .total {
+                    margin-left: 4rem;
                 }
             }
         }

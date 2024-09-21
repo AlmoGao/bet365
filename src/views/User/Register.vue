@@ -28,10 +28,10 @@
           <van-icon @click="showPass2 = false" v-show="showPass2" class="icon icon_right" name="eye-o" />
           <van-icon @click="showPass2 = true" v-show="!showPass2" class="icon icon_right" name="closed-eye" />
         </div>
-        <div class="subtitle">{{ _t("t20") }}</div>
+        <!-- <div class="subtitle">{{ _t("t20") }}</div>
         <div class="item">
           <input v-model="form.invite_code" type="text" :placeholder="_t('ipt')">
-        </div>
+        </div> -->
       </template>
 
       <!-- 邮箱注册 -->

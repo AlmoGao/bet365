@@ -7,7 +7,7 @@
 
         <div class="top">
             <div class="title">
-                <span>{{ _t('t111') }}({{ currency }})</span>
+                <span>{{ _t('t111') }}</span>
 
                 <van-icon @click="show = false" v-show="show" class="icon" name="eye-o" />
                 <van-icon @click="show = true" v-show="!show" class="icon" name="closed-eye" />
@@ -15,7 +15,7 @@
                 <!-- <van-icon class="icon" name="replay" /> -->
             </div>
 
-            <div class="num">{{ show ? userInfo.money : '******' }}</div>
+            <div class="num">{{ show ? (config.currency || '') + ' ' + userInfo.money : '******' }}</div>
 
             <div class="navs">
                 <div class="nav" @click="jumpLink">

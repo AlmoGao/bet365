@@ -10,7 +10,11 @@
                     <!-- 号码 -->
                     <Number ref="NumberRef" @preBet="preBet" :numbers="numbers" :config="config" :bigNum="bigNum" />
                     <div class="mid"></div>
+                    <!-- 总和 - 大小单双 -->
+                    <TotalBet @preBet="preBet" :numbers="numbers" :config="config" :bigNum="bigNum"
+                        v-if="game.name == 'bet365'" />
                     <van-loading style="text-align: center;margin-top: 20rem" type="spinner" v-if="infoLoading" />
+                    <div class="mid"></div>
                     <!-- 球得颜色 -->
                     <BallColor ref="BallColorRef" @preBet="preBet" :numbers="numbers" :config="config"
                         :bigNum="bigNum" />
@@ -45,7 +49,7 @@
         <div class="content">
             <div class="bet_info">
                 <!-- 总和 -->
-                <div v-if="preItem.code == 20">
+                <div v-if="[20, 29].includes(preItem.code)">
                     {{ preItem.key }}
                 </div>
                 <!-- 奇数/偶  -->
@@ -103,7 +107,7 @@
                 </div>
                 <div class="amount">
                     <div>余额</div>
-                    <div class="num">{{ userInfo.money }}</div>
+                    <div class="num">{{ pre }}{{ userInfo.money }}</div>
                 </div>
                 <div class="close" @click="showBottom = false"><van-icon name="arrow-down" /></div>
             </div>
@@ -144,7 +148,7 @@
 
                 <template v-for="(item, i) in betList">
                     <!-- 总和  -->
-                    <div class="bet_item" v-if="item.code == 20">
+                    <div class="bet_item" v-if="[20, 29].includes(item.code)">
                         <div class="bet_info">
                             <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
                             <div class="bet_info_name">{{ typeMap[item.code] }}</div>
@@ -482,8 +486,8 @@
             </div>
             <div class="bet_bottom" @click="goBet"
                 :style="{ opacity: (allBet[0] && allBet[0] * 1 > 0) ? (loading ? '0.5' : '1') : '0.5' }">
-                <div>投注 {{ allBet[0] }}</div>
-                <div class="return" v-if="allBet[1]">预期返还 {{ allBet[1] }}</div>
+                <div>投注 {{ pre }}{{ allBet[0] }}</div>
+                <div class="return" v-if="allBet[1]">预期返还 {{ pre }}{{ allBet[1] }}</div>
             </div>
         </div>
     </van-popup>
@@ -500,6 +504,7 @@ import One from "./components/One.vue"
 import Ones from "./components/Ones.vue"
 import Total from "./components/Total.vue"
 import Record from "./Record.vue"
+import TotalBet from "./components/TotalBet.vue"
 import http from "@/api/index"
 import store from "@/store"
 import { showToast } from "vant"
@@ -510,6 +515,10 @@ const ColorRef = ref()
 const OnesRef = ref()
 const OneRef = ref()
 const TotalRef = ref()
+const pre = computed(() => {
+    if (store.state.config?.currency) return store.state.config.currency + ' '
+    return ' '
+})
 
 store.dispatch('updateUser')
 const userInfo = computed(() => store.state.userInfo || {})
