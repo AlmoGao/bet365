@@ -56,6 +56,13 @@ const clickItem = (key) => {
         })
     }
 }
+
+const clear = () => {
+    curr.value = ''
+}
+defineExpose({
+    clear
+})
 </script>
 
 <style lang="less" scoped>

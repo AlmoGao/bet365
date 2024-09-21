@@ -129,7 +129,6 @@ const getGames = () => {
 }
 getGames()
 const clickItem = item => {
-  console.error(item)
   store.commit('setCurrGame', item)
   setTimeout(() => {
     router.push({

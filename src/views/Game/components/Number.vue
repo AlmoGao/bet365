@@ -9,7 +9,7 @@
                 <div class="number_box">
                     <div class="tip">
                         <span>选择最多{{ game.max_number }}个号码</span>
-                        <!-- <div class="random">随机选择</div> -->
+                        <div class="random" @click="randomNumber(9)">随机选择</div>
                     </div>
 
                     <div class="numbers">
@@ -20,11 +20,11 @@
                     </div>
                 </div>
             </van-tab>
-            <van-tab title="组合投注" name="b" v-if="game.name != 'bet365'">
+            <van-tab title="组合投注" name="b" v-if="game.name != 'bet365' && open2">
                 <div class="number_box">
                     <div class="tip">
                         <span>选择最多14个号码</span>
-                        <!-- <div class="random">随机选择</div> -->
+                        <div class="random" @click="randomNumber(14)">随机选择</div>
                     </div>
 
                     <div class="numbers">
@@ -197,7 +197,7 @@ import { ref, computed } from "vue"
 import { colorMap } from "../map"
 import store from "@/store"
 
-
+const open2 = computed(() => props.config.special_json && props.config.special_json[1])
 const open3 = computed(() => !!(props.config.other_json.first_numebr))
 const open4 = computed(() => !!(props.config.other_json.special_number))
 
@@ -282,8 +282,10 @@ const clickItem = (i, key) => {
                 const key = bets.value.length
                 const arr = props.config.single_json[key].split('/')
                 p = (Number(arr[0]) + Number(arr[1])) / Number(arr[1])
-                const arr2 = props.config.special_json[key].split('/')
-                p2 = (Number(arr2[0]) + Number(arr2[1])) / Number(arr2[1])
+                if (props.config.special_json && props.config.special_json[key]) {
+                    const arr2 = props.config.special_json[key].split('/')
+                    p2 = (Number(arr2[0]) + Number(arr2[1])) / Number(arr2[1])
+                }
             }
 
             emits('preBet', {
@@ -333,6 +335,41 @@ const clickItem = (i, key) => {
         }
     }
 }
+// 随机
+const randomNumber = key => {
+    bets.value = []
+    if (key == 14) { // 组合
+        const arr = getRandomIndexes(props.numbers.length, 14)
+        arr.forEach(item => {
+            clickItem((item + 1).toString(), 14)
+        })
+    }
+    if (key == 9) { // 单式
+        const arr = getRandomIndexes(props.numbers.length, game.value.max_number)
+        arr.forEach(item => {
+            clickItem((item + 1).toString(), 9)
+        })
+    }
+}
+
+function getRandomIndexes(maxLength, count) {
+    // 生成 0 到 maxLength-1 的数组
+    const indexes = Array.from({ length: maxLength }, (_, i) => i);
+    // Fisher-Yates 洗牌算法打乱数组
+    for (let i = maxLength - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+        [indexes[i], indexes[randomIndex]] = [indexes[randomIndex], indexes[i]];
+    }
+    // 返回打乱后的数组的前 count 个元素
+    return indexes.slice(0, count);
+}
+
+const clear = () => {
+    bets.value = []
+}
+defineExpose({
+    clear
+})
 </script>
 
 

@@ -16,7 +16,7 @@
       </div>
 
       <!-- 快捷入口 -->
-      <div class="subtitle">{{ _t('t76') }}</div>
+      <!-- <div class="subtitle">{{ _t('t76') }}</div> -->
       <div class="tabs">
          <!-- <div class="tab" @click="jump('passwordSet')">
             <img src="@/assets/my/tab1.png" alt="img">

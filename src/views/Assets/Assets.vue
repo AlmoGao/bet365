@@ -32,11 +32,11 @@
         <div class="top" style="border-top: none">
             <div class="navs">
                 <div class="nav" @click="jump('rcList')">
-                    <img src="@/assets/assets/nav-1.svg" alt="img">
+                    <img src="@/assets/assets/record.png" alt="img">
                     <div>充值记录</div>
                 </div>
                 <div class="nav" @click="jump('wdList')">
-                    <img src="@/assets/assets/nav-2.svg" alt="img">
+                    <img src="@/assets/assets/record.png" alt="img">
                     <div>{{ _t('t115') }}</div>
                 </div>
             </div>

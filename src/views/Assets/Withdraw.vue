@@ -12,6 +12,11 @@
                 <div class="tab" :class="{ 'active_tab': form.type == 1 }" @click="form.type = 1">银行卡</div>
                 <div class="tab" :class="{ 'active_tab': form.type == 2 }" @click="form.type = 2">钱包</div>
             </div>
+            <div class="item">
+                {{ form.type == 1 ? ((userInfo.bank?.bank_name || '') + ' ' + (userInfo.bank?.bank_card || '')) :
+                    ((userInfo.wallet?.type == 1 ? 'TRC20' : (userInfo.wallet?.type == 2 ? 'ERC20' : '')) + ' ' +
+                        (userInfo.wallet?.address || '')) }}
+            </div>
             <div class="subtitle">金额：</div>
             <div class="item">
                 <input v-model="form.amount" :type="'number'" :placeholder="_t('ipt')" class="ipt">
@@ -43,8 +48,24 @@ const form = ref({
 const loading = ref(false)
 const submit = () => {
     if (!form.value.amount) return showToast('请输入金额')
-    if (form.value.type == 1 && !userInfo.value.bank?.bank_name) return showToast('请先绑定银行卡')
-    if (form.value.type == 2 && !userInfo.value.wallet?.address) return showToast('请先绑定钱包')
+    if (form.value.type == 1 && !userInfo.value.bank?.bank_name) {
+        showToast('请先绑定银行卡')
+        setTimeout(() => {
+            router.push({
+                name: 'auth1'
+            })
+        }, 500)
+        return
+    }
+    if (form.value.type == 2 && !userInfo.value.wallet?.address) {
+        showToast('请先绑定钱包')
+        setTimeout(() => {
+            router.push({
+                name: 'auth3'
+            })
+        }, 500)
+        return
+    }
     if (loading.value) return
     loading.value = true
     http.withdraw({

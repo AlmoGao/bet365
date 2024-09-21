@@ -134,6 +134,18 @@ const clickItem = (arr, i, val, key) => {
     }
 }
 
+const clear = () => {
+    val1arr.value = [0]
+    val2arr.value = []
+    val3arr.value = []
+    for (let i = 0; i < (game.value.name == 'bet365' ? game.value.lottery_number : (game.value.lottery_number - 1)); i++) {
+        val2arr.value.push(0)
+        val3arr.value.push(0)
+    }
+}
+defineExpose({
+    clear
+})
 </script>
 
 <style lang="less" scoped>

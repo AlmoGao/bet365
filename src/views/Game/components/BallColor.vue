@@ -74,6 +74,13 @@ const clickItem = (i, key) => {
         emits('preBet', {})
     }
 }
+
+const clear = () => {
+    curr.value = []
+}
+defineExpose({
+    clear
+})
 </script>
 
 <style lang="less" scoped>
