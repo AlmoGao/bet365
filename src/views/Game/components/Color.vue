@@ -2,7 +2,7 @@
 <template>
     <div class="bet_color" v-if="open">
         <van-tabs v-model:active="active" shrink>
-            <van-tab title="特别号码颜色"></van-tab>
+            <van-tab :title="_t('bb33')"></van-tab>
         </van-tabs>
 
         <div class="boxs">
@@ -21,6 +21,7 @@
 import { ref, computed } from "vue"
 import { colorMap, colorTextMap } from "../map"
 import store from "@/store"
+import { _t } from "@/lang/index";
 
 const open = computed(() => props.config.other_json && props.config.other_json.special_number_color)
 const emits = defineEmits(['preBet'])

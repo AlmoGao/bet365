@@ -1,13 +1,13 @@
 <!-- 初级认证 -->
 <template>
     <div class="page-auth1">
-        <Top :title="'钱包'" />
+        <Top :title="_t('2')" />
 
 
         <!-- <div class="tip">为了保障账户安全体验，请您绑定个人身份信息</div> -->
 
         <div class="form">
-            <div class="subtitle">类型：</div>
+            <div class="subtitle">{{ _t('5') }}：</div>
             <div class="item" v-if="!userInfo.wallet?.address">
                 <div class="tab" :class="{ 'active_tab': form.type == 1 }" @click="form.type = 1">Trc20</div>
                 <div class="tab" :class="{ 'active_tab': form.type == 2 }" @click="form.type = 2">Erc20</div>
@@ -15,7 +15,7 @@
             <div class="item" v-if="userInfo.wallet?.address">
                 <div class="tab active_tab">{{ userInfo.wallet.type == 1 ? 'Trc20' : 'Erc20' }}</div>
             </div>
-            <div class="subtitle">地址：</div>
+            <div class="subtitle">{{ _t('6') }}：</div>
             <div class="item">
                 <input v-model="form.address" :type="'text'" :placeholder="_t('ipt')" class="ipt">
             </div>
@@ -45,7 +45,7 @@ const form = ref({
 
 const loading = ref(false)
 const submit = () => {
-    if (!form.value.address) return showToast('请输入地址')
+    if (!form.value.address) return showToast(_t("7"))
     if (loading.value) return
     loading.value = true
     http.bindWallet(form.value).then(res => {

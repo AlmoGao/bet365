@@ -1,7 +1,7 @@
 <!-- 初级认证 -->
 <template>
     <div class="page-auth1">
-        <Top :title="'银行卡'" />
+        <Top :title="_t('4')" />
 
 
         <!-- <div class="tip">为了保障账户安全体验，请您绑定个人身份信息</div> -->

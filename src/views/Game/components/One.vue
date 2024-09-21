@@ -2,53 +2,53 @@
 <template>
     <div class="bet_one">
         <van-tabs v-model:active="active" shrink>
-            <van-tab title="首个摇出号码 奇/偶数" name="f" v-if="open1"></van-tab>
-            <van-tab title="单数或双数" name="s" v-if="open2"></van-tab>
-            <van-tab title="猜大小" name="t" v-if="open3"></van-tab>
+            <van-tab :title="_t('bb53')" name="f" v-if="open1"></van-tab>
+            <van-tab :title="_t('bb54')" name="s" v-if="open2"></van-tab>
+            <van-tab :title="_t('bb55')" name="t" v-if="open3"></van-tab>
         </van-tabs>
 
         <div class="content" v-if="active == 'f' && open1">
-            <div class="tip">选择奇数或偶数</div>
+            <div class="tip">{{ _t('bb56') }}</div>
             <div class="tr">
-                <div class="name">第一</div>
+                <div class="name">{{ _t('bb57') }}</div>
                 <div class="td" @click="clickItem(val1arr, 0, 1, 17)" :class="{ 'active_td': val1arr[0] == 1 }">
                     <van-icon name="success" />
-                    <span>单数</span>
+                    <span>{{ _t('b5') }}</span>
                 </div>
                 <div class="line"></div>
                 <div class="td" @click="clickItem(val1arr, 0, 2, 17)" :class="{ 'active_td': val1arr[0] == 2 }">
                     <van-icon name="success" />
-                    <span>双数</span>
+                    <span>{{ _t('b6') }}</span>
                 </div>
             </div>
         </div>
         <div class="content" v-if="active == 's' && open2">
-            <div class="tip">选择所有号码的奇偶数</div>
+            <div class="tip">{{ _t('bb58') }}</div>
             <div class="tr" v-for="i in (game.name == 'bet365' ? game.lottery_number : (game.lottery_number - 1))">
-                <div class="name">第{{ i }}</div>
+                <div class="name">{{ _t('10') }}{{ i }}</div>
                 <div class="td" @click="clickItem(val2arr, i - 1, 1, 18)" :class="{ 'active_td': val2arr[i - 1] == 1 }">
                     <van-icon name="success" />
-                    <span>单数</span>
+                    <span>{{ _t('b5') }}</span>
                 </div>
                 <div class="line"></div>
                 <div class="td" @click="clickItem(val2arr, i - 1, 2, 18)" :class="{ 'active_td': val2arr[i - 1] == 2 }">
                     <van-icon name="success" />
-                    <span>双数</span>
+                    <span>{{ _t('b6') }}</span>
                 </div>
             </div>
         </div>
         <div class="content" v-if="active == 't' && open3">
-            <div class="tip">选择每个号码高于或低于{{ props.bigNum }}</div>
+            <div class="tip">{{ _t('bb59') }}{{ props.bigNum }}</div>
             <div class="tr" v-for="i in (game.name == 'bet365' ? game.lottery_number : (game.lottery_number - 1))">
-                <div class="name">第{{ i }}</div>
+                <div class="name">{{ _t('10') }}{{ i }}</div>
                 <div class="td" @click="clickItem(val3arr, i - 1, 1, 19)" :class="{ 'active_td': val3arr[i - 1] == 1 }">
                     <van-icon name="success" />
-                    <span>正好或高于{{ props.bigNum }}</span>
+                    <span>{{ _t('bb60') }}{{ props.bigNum }}</span>
                 </div>
                 <div class="line"></div>
                 <div class="td" @click="clickItem(val3arr, i - 1, 2, 19)" :class="{ 'active_td': val3arr[i - 1] == 2 }">
                     <van-icon name="success" />
-                    <span>低于{{ props.bigNum }}</span>
+                    <span>{{ _t('bb61') }}{{ props.bigNum }}</span>
                 </div>
             </div>
         </div>
@@ -58,6 +58,7 @@
 <script setup>
 import { ref, computed } from "vue"
 import store from "@/store"
+import { _t } from "@/lang/index";
 
 const open1 = computed(() => !!(props.config.other_json.first_oe))
 const open2 = computed(() => !!(props.config.other_json.oe))

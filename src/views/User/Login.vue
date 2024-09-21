@@ -3,7 +3,9 @@
   <div class="page-login">
 
 
-    <div class="title">{{ _t('t1') }}</div>
+    <div class="title"><span>{{ _t('t1') }}</span>
+      <LangIcon />
+    </div>
 
 
 
@@ -56,6 +58,7 @@ import https from "@/api/index"
 import { showToast } from 'vant';
 import store from "@/store"
 import { _t } from "@/lang/index";
+import LangIcon from "@/components/LangIcon.vue"
 
 const activeTab = ref(1)
 const showPass1 = ref(false)
@@ -115,6 +118,9 @@ const submit = () => {
   .title {
     font-size: 6rem;
     margin: 8rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .tabs {

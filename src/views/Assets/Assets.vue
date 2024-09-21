@@ -20,7 +20,7 @@
             <div class="navs">
                 <div class="nav" @click="jumpLink">
                     <img src="@/assets/assets/nav-1.svg" alt="img">
-                    <div>充值</div>
+                    <div>{{ _t('11') }}</div>
                 </div>
                 <div class="nav" @click="jump('withdraw')">
                     <img src="@/assets/assets/nav-2.svg" alt="img">
@@ -33,7 +33,7 @@
             <div class="navs">
                 <div class="nav" @click="jump('rcList')">
                     <img src="@/assets/assets/record.png" alt="img">
-                    <div>充值记录</div>
+                    <div>{{ _t('12') }}</div>
                 </div>
                 <div class="nav" @click="jump('wdList')">
                     <img src="@/assets/assets/record.png" alt="img">

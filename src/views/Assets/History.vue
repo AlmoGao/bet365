@@ -1,9 +1,7 @@
 <!-- 提现记录 -->
 <template>
     <div class="page-rc_list">
-        <Top :title="'投注记录'" />
-
-
+        <Top :title="_t('8')" />
 
         <div class="list" v-for="(item, i) in list" :key="i">
             <div class="item">
@@ -17,7 +15,7 @@
                     <span>{{ parseTime(item.createtime) }}</span>
                 </div>
                 <div class="item_box">
-                    <span>投注：{{ item.amount }}</span>
+                    <span>{{ _t('9') }}：{{ item.amount }}</span>
                     <span style="flex:1"></span>
                     <span class="num" v-if="item.winning_amount * 1">+{{ item.winning_amount }}</span>
                     <span style="margin-left:4rem">{{ item.status_text }}</span>
@@ -32,15 +30,15 @@
                     <div v-if="[12, 17, 18].includes(item.category_id)"
                         style="display: flex;flex-wrap: wrap;align-items: center;">
                         <div style="margin:0 2rem 1rem 0;" v-for="(item, i) in item.bet_content" :key="i"
-                            :style="{ display: item ? 'block' : 'none' }">第{{ i + 1 }} {{ item ==
-                                1 ? '奇数' : '偶数' }}</div>
+                            :style="{ display: item ? 'block' : 'none' }">{{ _t('10') }}{{ i + 1 }} {{ item ==
+                                1 ? _t('b1') : _t('b2') }}</div>
                     </div>
                     <!-- 大小  -->
                     <div v-if="[13, 19].includes(item.category_id)"
                         style="display: flex;flex-wrap: wrap;align-items: center;">
                         <div style="margin:0 2rem 1rem 0;" :style="{ display: item ? 'block' : 'none' }"
-                            v-for="(item, i) in item.bet_content" :key="i">第{{ i + 1 }} {{ item ==
-                                1 ? ('大') : ('小') }}</div>
+                            v-for="(item, i) in item.bet_content" :key="i">{{ _t('10') }}{{ i + 1 }} {{ item ==
+                                1 ? _t('b3') : _t('b4') }}</div>
                     </div>
                     <!-- 特殊球颜色 -->
                     <div v-if="item.category_id == 16" style="display: flex;align-items: center;">
@@ -53,7 +51,7 @@
                         <div v-for="(item, i) in (item.bet_content.split(','))" :key="i"
                             style="margin:0 2rem 1rem 0;;align-items: center;"
                             :style="{ display: item ? 'flex' : 'none' }">
-                            <div>第{{ i + 1 }} </div>
+                            <div>{{ _t('10') }}{{ i + 1 }} </div>
                             <div style="width:4rem;height:4rem;border-radius: 50%;margin:0 1rem"
                                 :style="{ backgroundColor: colorMap[item] || '#999' }"></div>
                             <span>{{ colorTextMap[item] }}</span>
@@ -80,12 +78,13 @@ import Top from '@/components/Top.vue';
 import { ref, computed } from "vue"
 import router from '@/router';
 import http from "@/api"
-import { parseTime } from "@/tools/utils"
+import { parseTime, _typeMap } from "@/tools/utils"
 import { colorMap, colorTextMap } from '../Game/map'
 import store from '@/store';
+import { _t } from "@/lang/index";
 
 
-const typeMap = computed(() => store.state.typeMap || {})
+const typeMap = computed(() => _typeMap() || {})
 const list = ref([])
 const getList = () => {
     http.betList().then(res => {

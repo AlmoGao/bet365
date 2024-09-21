@@ -2,11 +2,11 @@
 <template>
     <div class="bet_ballcolor" v-if="open">
         <van-tabs v-model:active="active" shrink>
-            <van-tab title="球的颜色"></van-tab>
+            <van-tab :title="_t('bb31')"></van-tab>
         </van-tabs>
 
         <div class="boxs">
-            <div>选择一个或多个球的颜色</div>
+            <div>{{ _t('bb32') }}</div>
             <div class="box">
                 <div class="name"></div>
                 <div class="box_c" v-for="(val, key) in props.config.number_json" :key="key"
@@ -17,7 +17,7 @@
             </div>
             <div class="box" v-for="i in (game.name == 'bet365' ? game.lottery_number : (game.lottery_number - 1))"
                 :key="i">
-                <div class="name">第{{ i }}</div>
+                <div class="name">{{ _t('10') }}{{ i }}</div>
                 <div @click="clickItem(i, key)" class="box_c" v-for="(val, key) in props.config.number_json" :key="key"
                     :style="{ border: `1px solid ${colorMap[key]}`, backgroundColor: curr[i] == key ? colorMap[key] : '', marginLeft: `${8 - Object.keys(props.config.number_json).length}rem` }">
                 </div>
@@ -31,6 +31,7 @@
 import { ref, computed } from "vue"
 import { colorMap, colorTextMap } from "../map"
 import store from "@/store"
+import { _t } from "@/lang/index";
 
 const emits = defineEmits(['preBet'])
 const open = computed(() => props.config.yanse_json && props.config.yanse_json[1])

@@ -1,23 +1,23 @@
 <!-- 初级认证 -->
 <template>
     <div class="page-auth1">
-        <Top :title="'提现'" />
+        <Top :title="_t('t143')" />
 
 
-        <div class="tip">余额：{{ userInfo.money }}</div>
+        <div class="tip">{{ _t('1') }}：{{ userInfo.money }}</div>
 
         <div class="form">
-            <div class="subtitle">类型：</div>
+            <div class="subtitle">{{ _t('5') }}：</div>
             <div class="item">
-                <div class="tab" :class="{ 'active_tab': form.type == 1 }" @click="form.type = 1">银行卡</div>
-                <div class="tab" :class="{ 'active_tab': form.type == 2 }" @click="form.type = 2">钱包</div>
+                <div class="tab" :class="{ 'active_tab': form.type == 1 }" @click="form.type = 1">{{ _t('4') }}</div>
+                <div class="tab" :class="{ 'active_tab': form.type == 2 }" @click="form.type = 2">{{ _t('2') }}</div>
             </div>
             <div class="item">
                 {{ form.type == 1 ? ((userInfo.bank?.bank_name || '') + ' ' + (userInfo.bank?.bank_card || '')) :
                     ((userInfo.wallet?.type == 1 ? 'TRC20' : (userInfo.wallet?.type == 2 ? 'ERC20' : '')) + ' ' +
                         (userInfo.wallet?.address || '')) }}
             </div>
-            <div class="subtitle">金额：</div>
+            <div class="subtitle">{{ _t('13') }}：</div>
             <div class="item">
                 <input v-model="form.amount" :type="'number'" :placeholder="_t('ipt')" class="ipt">
             </div>
@@ -47,9 +47,9 @@ const form = ref({
 
 const loading = ref(false)
 const submit = () => {
-    if (!form.value.amount) return showToast('请输入金额')
+    if (!form.value.amount) return showToast(_t('14'))
     if (form.value.type == 1 && !userInfo.value.bank?.bank_name) {
-        showToast('请先绑定银行卡')
+        showToast(_t('15'))
         setTimeout(() => {
             router.push({
                 name: 'auth1'
@@ -58,7 +58,7 @@ const submit = () => {
         return
     }
     if (form.value.type == 2 && !userInfo.value.wallet?.address) {
-        showToast('请先绑定钱包')
+        showToast(_t('16'))
         setTimeout(() => {
             router.push({
                 name: 'auth3'

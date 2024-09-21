@@ -10,19 +10,19 @@
 
             <div class="boxs">
                 <div class="box" @click="clickItem('大', other_json['大'])">
-                    <span>大</span>
+                    <span>{{ _t('b3') }}</span>
                     <span class="val">{{ other_json['大'] }}</span>
                 </div>
                 <div class="box" @click="clickItem('小', other_json['小'])">
-                    <span>小</span>
+                    <span>{{ _t('b4') }}</span>
                     <span class="val">{{ other_json['小'] }}</span>
                 </div>
                 <div class="box" @click="clickItem('单', other_json['单'])">
-                    <span>单</span>
+                    <span>{{ _t('b7') }}</span>
                     <span class="val">{{ other_json['单'] }}</span>
                 </div>
                 <div class="box" @click="clickItem('双', other_json['双'])">
-                    <span>双</span>
+                    <span>{{ _t('b8') }}</span>
                     <span class="val">{{ other_json['双'] }}</span>
                 </div>
             </div>
@@ -34,6 +34,7 @@
 <script setup>
 import { ref, computed } from "vue"
 import store from "@/store"
+import { _t } from "@/lang/index";
 
 const emits = defineEmits(['preBet'])
 

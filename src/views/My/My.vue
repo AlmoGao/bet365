@@ -11,7 +11,7 @@
                <span>{{ userInfo.username }}</span>
                <!-- <img class="copy" src="@/assets/my/copy.svg" alt="img"> -->
             </div>
-            <div>余额：{{ (config.currency || '') + ' ' + userInfo.money }}</div>
+            <div>{{ _t('1') }}：{{ (config.currency || '') + ' ' + userInfo.money }}</div>
          </div>
       </div>
 
@@ -32,7 +32,7 @@
          </div>
          <div class="tab" @click="jump('auth3')">
             <img src="@/assets/my/tab4.png" alt="img">
-            <div>钱包</div>
+            <div>{{ _t('2') }}</div>
          </div>
       </div>
       <!-- 通用 -->
@@ -40,7 +40,7 @@
       <div class="navs">
          <div class="nav" @click="jump('hisory')">
             <img src="@/assets/my/nav1.jpeg" alt="img">
-            <div class="info">历史记录</div>
+            <div class="info">{{ _t('3') }}</div>
             <van-icon name="arrow" />
          </div>
          <!-- <div class="nav" @click="goAuth">

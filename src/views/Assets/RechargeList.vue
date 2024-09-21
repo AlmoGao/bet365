@@ -1,7 +1,7 @@
 <!-- 充值记录 -->
 <template>
     <div class="page-rc_list">
-        <Top :title="'充值记录'" />
+        <Top :title="_t('17')" />
 
         <!-- <van-tabs v-model:active="activeTab" animated>
             <van-tab title="全部" name="all">
@@ -22,11 +22,11 @@
                     <van-icon name="arrow" />
                 </div> -->
                 <div class="item_box">
-                    <span>金额</span>
+                    <span>{{ _t('13') }}</span>
                     <span class="num">+{{ item.money || '--' }}</span>
                 </div>
                 <div class="item_box">
-                    <span>时间</span>
+                    <span>{{ _t('18') }}</span>
                     <span>{{ parseTime(item.createtime) }}</span>
                 </div>
             </div>
@@ -41,12 +41,9 @@ import { ref, computed } from "vue"
 import router from '@/router';
 import http from "@/api"
 import { parseTime } from "@/tools/utils"
+import { _t } from "@/lang/index";
 
-const statusMap = ref({
-    0: '待审核',
-    1: '成功',
-    2: '失败'
-})
+
 
 const list = ref([])
 const getList = () => {

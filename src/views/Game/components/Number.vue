@@ -2,14 +2,14 @@
 <template>
     <div class="bet_number">
 
-        <span class="per_btn" @click="show = true">赔付</span>
+        <span class="per_btn" @click="show = true">{{ _t('bb34') }}</span>
 
         <van-tabs @change="changeTab" v-model:active="active" shrink>
-            <van-tab :title="game.name == 'bet365' ? '5球抽奖' : '单式投注'" name="a">
+            <van-tab :title="game.name == 'bet365' ? _t('bb35') : _t('bb22')" name="a">
                 <div class="number_box">
                     <div class="tip">
-                        <span>选择最多{{ game.max_number }}个号码</span>
-                        <div class="random" @click="randomNumber(9)">随机选择</div>
+                        <span>{{ _t('bb36', { t1: game.max_number }) }}</span>
+                        <div class="random" @click="randomNumber(9)">{{ _t('bb37') }}</div>
                     </div>
 
                     <div class="numbers">
@@ -20,11 +20,11 @@
                     </div>
                 </div>
             </van-tab>
-            <van-tab title="组合投注" name="b" v-if="game.name != 'bet365' && open2">
+            <van-tab :title="_t('bb40')" name="b" v-if="game.name != 'bet365' && open2">
                 <div class="number_box">
                     <div class="tip">
-                        <span>选择最多14个号码</span>
-                        <div class="random" @click="randomNumber(14)">随机选择</div>
+                        <span>{{ _t('bb38') }}</span>
+                        <div class="random" @click="randomNumber(14)">{{ _t('bb39') }}</div>
                     </div>
 
                     <div class="numbers">
@@ -35,10 +35,10 @@
                     </div>
                 </div>
             </van-tab>
-            <van-tab title="第1个号码" name="c" v-if="open3">
+            <van-tab :title="_t('bb41')" name="c" v-if="open3">
                 <div class="number_box">
                     <div class="tip">
-                        <span>选择第一个抽出的号码</span>
+                        <span>{{ _t('bb42') }}</span>
                         <!-- <div class="random">随机选择</div> -->
                     </div>
 
@@ -50,10 +50,10 @@
                     </div>
                 </div>
             </van-tab>
-            <van-tab title="特别号码" name="d" v-if="open4">
+            <van-tab :title="_t('bb43')" name="d" v-if="open4">
                 <div class="number_box">
                     <div class="tip">
-                        <span>选择特别号码</span>
+                        <span>{{ _t('bb44') }}</span>
                     </div>
 
                     <div class="numbers">
@@ -75,7 +75,7 @@
             <!-- 365 -->
             <div class="table" @click.stop v-if="game.name == 'bet365'">
                 <div class="block">
-                    <div class="title">选5球</div>
+                    <div class="title">{{ _t('bb45') }}</div>
                     <div class="row">
                         <img class="icon" src="@/assets/ok.svg" alt="ok">
                         <img class="icon" src="@/assets/ok.svg" alt="ok">
@@ -105,7 +105,7 @@
                     </div>
                 </div>
                 <div class="block">
-                    <div class="title">选4球</div>
+                    <div class="title">{{ _t('bb46') }}</div>
                     <div class="row">
                         <img class="icon" src="@/assets/ok.svg" alt="ok">
                         <img class="icon" src="@/assets/ok.svg" alt="ok">
@@ -132,7 +132,7 @@
                     </div>
                 </div>
                 <div class="block">
-                    <div class="title">选3球</div>
+                    <div class="title">{{ _t('bb47') }}</div>
                     <div class="row">
                         <img class="icon" src="@/assets/ok.svg" alt="ok">
                         <img class="icon" src="@/assets/ok.svg" alt="ok">
@@ -149,7 +149,7 @@
                     </div>
                 </div>
                 <div class="block">
-                    <div class="title">选2球</div>
+                    <div class="title">{{ _t('bb48') }}</div>
                     <div class="row">
                         <img class="icon" src="@/assets/ok.svg" alt="ok">
                         <img class="icon" src="@/assets/ok.svg" alt="ok">
@@ -164,7 +164,7 @@
                     </div>
                 </div>
                 <div class="block">
-                    <div class="title">选1球</div>
+                    <div class="title">{{ _t('bb49') }}</div>
                     <div class="row">
                         <img class="icon" src="@/assets/ok.svg" alt="ok">
                         <div style="flex: 1;"></div>
@@ -175,11 +175,11 @@
             <!-- 非365 -->
             <div class="table" @click.stop v-else>
                 <div class="tr th">
-                    <div class="td">选项</div>
-                    <div class="td">{{ game.max_number + 1 }}个已摇出</div>
+                    <div class="td">{{ _t('bb50') }}</div>
+                    <div class="td">{{ game.max_number + 1 }}{{ _t('bb51') }}</div>
                     <div class="td">
-                        <div>{{ game.max_number + 2 }}个已摇出</div>
-                        <div class="tip">包括特别号码</div>
+                        <div>{{ game.max_number + 2 }}{{ _t('bb51') }}</div>
+                        <div class="tip">{{ _t('bb52') }}</div>
                     </div>
                 </div>
                 <div class="tr" v-for="(val, key) in props.config.single_json" :key="key">
@@ -196,6 +196,7 @@
 import { ref, computed } from "vue"
 import { colorMap } from "../map"
 import store from "@/store"
+import { _t } from "@/lang/index";
 
 const open2 = computed(() => props.config.special_json && props.config.special_json[1])
 const open3 = computed(() => !!(props.config.other_json.first_numebr))
@@ -380,7 +381,7 @@ defineExpose({
     .per_btn {
         position: absolute;
         right: 2rem;
-        top: 3.5rem;
+        top: -2rem;
         z-index: 99;
         color: chocolate;
     }

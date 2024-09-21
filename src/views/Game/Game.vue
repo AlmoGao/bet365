@@ -5,7 +5,7 @@
 
         <div>
             <van-tabs v-model:active="active" shrink animated>
-                <van-tab title="投注盘">
+                <van-tab :title="_t('bb10')">
                     <div class="mid"></div>
                     <!-- 号码 -->
                     <Number ref="NumberRef" @preBet="preBet" :numbers="numbers" :config="config" :bigNum="bigNum" />
@@ -31,7 +31,7 @@
                     <div class="mid"></div>
                     <div class="mid"></div>
                 </van-tab>
-                <van-tab title="结果">
+                <van-tab :title="_t('bb11')">
                     <Record v-if="active == 1" />
                 </van-tab>
             </van-tabs>
@@ -56,63 +56,64 @@
                 <div v-if="[12, 17, 18].includes(preItem.code)"
                     style="display: flex;flex-wrap: wrap;align-items: center;">
                     <div style="margin:0 2rem 1rem 0;" v-for="(item, i) in preItem.key" :key="i"
-                        :style="{ display: item ? 'block' : 'none' }">第{{ i + 1 }} {{ item ==
-                            1 ? '奇数' : '偶数' }}</div>
+                        :style="{ display: item ? 'block' : 'none' }">{{ _t('10') }}{{ i + 1 }} {{ item ==
+                            1 ? _t('b1') : _t('b2') }}</div>
                 </div>
                 <!-- 大小  -->
                 <div v-if="[13, 19].includes(preItem.code)" style="display: flex;flex-wrap: wrap;align-items: center;">
                     <div style="margin:0 2rem 1rem 0;" :style="{ display: item ? 'block' : 'none' }"
-                        v-for="(item, i) in preItem.key" :key="i">第{{ i + 1 }} {{ item ==
-                            1 ? (bigNum + '及高于') : ('低于' + bigNum) }}</div>
-                </div>
-                <!-- 特殊球颜色 -->
-                <div v-if="preItem.code == 16" style="display: flex;align-items: center;">
-                    <div style="width:8rem;height:8rem;border-radius: 50%;margin-right:2rem"
-                        :style="{ backgroundColor: colorMap[preItem.key] }"></div>
-                    <span>{{ colorTextMap[preItem.key] }}</span>
-                </div>
-                <!-- 球的颜色 -->
-                <div v-if="[11].includes(preItem.code)" style="display: flex;flex-wrap: wrap;align-items: center;">
-                    <div v-for="(item, i) in preItem.key" :key="i" style="margin:0 2rem 1rem 0;;align-items: center;"
-                        :style="{ display: item ? 'flex' : 'none' }">
-                        <div>第{{ i }} </div>
-                        <div style="width:4rem;height:4rem;border-radius: 50%;margin:0 1rem"
-                            :style="{ backgroundColor: colorMap[item] }"></div>
-                        <span>{{ colorTextMap[item] }}</span>
+                        v-for="(item, i) in preItem.key" :key="i">{{ _t('10') }}{{ i + 1 }} {{ item ==
+                            1 ? ('≥' + bigNum) : ('<' + bigNum) }}</div>
+                    </div>
+                    <!-- 特殊球颜色 -->
+                    <div v-if="preItem.code == 16" style="display: flex;align-items: center;">
+                        <div style="width:8rem;height:8rem;border-radius: 50%;margin-right:2rem"
+                            :style="{ backgroundColor: colorMap[preItem.key] }"></div>
+                        <span>{{ colorTextMap[preItem.key] }}</span>
+                    </div>
+                    <!-- 球的颜色 -->
+                    <div v-if="[11].includes(preItem.code)" style="display: flex;flex-wrap: wrap;align-items: center;">
+                        <div v-for="(item, i) in preItem.key" :key="i"
+                            style="margin:0 2rem 1rem 0;;align-items: center;"
+                            :style="{ display: item ? 'flex' : 'none' }">
+                            <div>{{ _t('10') }}{{ i }} </div>
+                            <div style="width:4rem;height:4rem;border-radius: 50%;margin:0 1rem"
+                                :style="{ backgroundColor: colorMap[item] }"></div>
+                            <span>{{ colorTextMap[item] }}</span>
+                        </div>
+                    </div>
+                    <!-- 特别号码/第一个号码/单式/组合 -->
+                    <div v-if="[15, 10, 9, 14].includes(preItem.code)"
+                        style="display: flex;flex-wrap: wrap;align-items: center;">
+                        <div :style="{ backgroundColor: getColor(item) }" v-for="(item, i) in preItem.key" :key="i"
+                            style="margin:0 1rem 1rem 0;align-items: center;justify-content: center;width: 6rem;height: 6rem;border-radius: 50%;color:#fff;font-weight: bold;display: flex;">
+                            {{ item }}
+                        </div>
                     </div>
                 </div>
-                <!-- 特别号码/第一个号码/单式/组合 -->
-                <div v-if="[15, 10, 9, 14].includes(preItem.code)"
-                    style="display: flex;flex-wrap: wrap;align-items: center;">
-                    <div :style="{ backgroundColor: getColor(item) }" v-for="(item, i) in preItem.key" :key="i"
-                        style="margin:0 1rem 1rem 0;align-items: center;justify-content: center;width: 6rem;height: 6rem;border-radius: 50%;color:#fff;font-weight: bold;display: flex;">
-                        {{ item }}
-                    </div>
-                </div>
+                <div class="link" @click="addToList">{{ _t('bb12') }}</div>
             </div>
-            <div class="link" @click="addToList">添加至投注单</div>
         </div>
-    </div>
 
-    <!-- 投注图标 -->
-    <div class="tip_num" @click="showBottom = true" v-if="betList.length">{{ betList.length }}</div>
+        <!-- 投注图标 -->
+        <div class="tip_num" @click="showBottom = true" v-if="betList.length">{{ betList.length }}</div>
 
-    <!-- 投注 -->
-    <van-popup v-model:show="showBottom" round position="bottom">
-        <div class="bet_dialog">
-            <div class="bet_top">
-                <div class="option">
-                    <div class="num">2</div>
-                    <div>选项</div>
+        <!-- 投注 -->
+        <van-popup v-model:show="showBottom" round position="bottom">
+            <div class="bet_dialog">
+                <div class="bet_top">
+                    <div class="option">
+                        <div class="num">2</div>
+                        <div>{{ _t('bb13') }}</div>
+                    </div>
+                    <div class="amount">
+                        <div>{{ _t('1') }}</div>
+                        <div class="num">{{ pre }}{{ userInfo.money }}</div>
+                    </div>
+                    <div class="close" @click="showBottom = false"><van-icon name="arrow-down" /></div>
                 </div>
-                <div class="amount">
-                    <div>余额</div>
-                    <div class="num">{{ pre }}{{ userInfo.money }}</div>
-                </div>
-                <div class="close" @click="showBottom = false"><van-icon name="arrow-down" /></div>
-            </div>
-            <div class="bet_content">
-                <!-- <div class="bet_item">
+                <div class="bet_content">
+                    <!-- <div class="bet_item">
                     <div class="bet_info">
                         <van-icon class="bet_info_delete" name="cross" />
                         <div class="bet_info_name">组合投注</div>
@@ -129,7 +130,7 @@
                     </div>
                 </div> -->
 
-                <!-- <div class="bet_item">
+                    <!-- <div class="bet_item">
                     <div class="bet_info">
                         <van-icon class="bet_info_delete" name="cross" />
                         <div class="bet_info_name">组合投注</div>
@@ -146,351 +147,384 @@
                     </div>
                 </div> -->
 
-                <template v-for="(item, i) in betList">
-                    <!-- 总和  -->
-                    <div class="bet_item" v-if="[20, 29].includes(item.code)">
-                        <div class="bet_info">
-                            <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
-                            <div class="bet_info_name">{{ typeMap[item.code] }}</div>
-                            <div class="bet_info_per">{{ item.p }}</div>
-                            <div class="bet_ipt_box">
-                                <span></span>
-                                <input type="number" v-model="item.amount" class="bet_ipt" placeholder="本金">
+                    <template v-for="(item, i) in betList">
+                        <!-- 总和  -->
+                        <div class="bet_item" v-if="[20, 29].includes(item.code)">
+                            <div class="bet_info">
+                                <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
+                                <div class="bet_info_name">{{ typeMap[item.code] }}</div>
+                                <div class="bet_info_per">{{ item.p }}</div>
+                                <div class="bet_ipt_box">
+                                    <span></span>
+                                    <input type="number" v-model="item.amount" class="bet_ipt"
+                                        :placeholder="_t('bb14')">
+                                </div>
+                            </div>
+                            <div style="display: flex;align-items: center;justify-content: space-between;">
+                                <div style="padding: 0 4rem">
+                                    {{ item.key }}
+                                </div>
+
+                                <div style="text-align: right;padding-right:4rem" v-if="item.amount">
+                                    <div>{{ _t('bb14') }} {{ item.amount }}</div>
+                                    <div>{{ _t('bb15') }}</div>
+                                    <div>{{ item.amount * item.p }}</div>
+                                </div>
                             </div>
                         </div>
-                        <div style="display: flex;align-items: center;justify-content: space-between;">
-                            <div style="padding: 0 4rem">
-                                {{ item.key }}
+                        <!-- 奇数/偶  -->
+                        <div class="bet_item" v-if="[12, 17, 18].includes(item.code)">
+                            <div class="bet_info">
+                                <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
+                                <div class="bet_info_name">{{ typeMap[item.code] }}</div>
+                                <div class="bet_info_per">{{ item.p }}</div>
+                                <div class="bet_ipt_box">
+                                    <span></span>
+                                    <input type="number" v-model="item.amount" class="bet_ipt"
+                                        :placeholder="_t('bb14')">
+                                </div>
                             </div>
+                            <div style="display: flex;align-items: center;justify-content: space-between;">
+                                <div style="display: flex;flex-wrap: wrap;align-items: center;padding: 0 4rem">
+                                    <div style="margin:0 2rem 1rem 0;" v-for="(t, i) in item.key" :key="i"
+                                        :style="{ display: t ? 'block' : 'none' }">{{ _t('10') }}{{ i + 1 }} {{ t ==
+                                            1 ? _t('b1') : _t('b2') }}</div>
+                                </div>
 
-                            <div style="text-align: right;padding-right:4rem" v-if="item.amount">
-                                <div>本金 {{ item.amount }}</div>
-                                <div>预期返还</div>
-                                <div>{{ item.amount * item.p }}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 奇数/偶  -->
-                    <div class="bet_item" v-if="[12, 17, 18].includes(item.code)">
-                        <div class="bet_info">
-                            <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
-                            <div class="bet_info_name">{{ typeMap[item.code] }}</div>
-                            <div class="bet_info_per">{{ item.p }}</div>
-                            <div class="bet_ipt_box">
-                                <span></span>
-                                <input type="number" v-model="item.amount" class="bet_ipt" placeholder="本金">
-                            </div>
-                        </div>
-                        <div style="display: flex;align-items: center;justify-content: space-between;">
-                            <div style="display: flex;flex-wrap: wrap;align-items: center;padding: 0 4rem">
-                                <div style="margin:0 2rem 1rem 0;" v-for="(t, i) in item.key" :key="i"
-                                    :style="{ display: t ? 'block' : 'none' }">第{{ i + 1 }} {{ t ==
-                                        1 ? '奇数' : '偶数' }}</div>
-                            </div>
-
-                            <div style="text-align: right;padding-right:4rem" v-if="item.amount">
-                                <div>本金 {{ item.amount }}</div>
-                                <div>预期返还</div>
-                                <div>{{ item.amount * item.p }}</div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- 大小  -->
-                    <div class="bet_item" v-if="[13, 19].includes(item.code)">
-                        <div class="bet_info">
-                            <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
-                            <div class="bet_info_name">{{ typeMap[item.code] }}</div>
-                            <div class="bet_info_per">{{ item.p }}</div>
-                            <div class="bet_ipt_box">
-                                <span></span>
-                                <input type="number" v-model="item.amount" class="bet_ipt" placeholder="本金">
-                            </div>
-                        </div>
-                        <div style="display: flex;align-items: center;justify-content: space-between;">
-                            <div style="display: flex;flex-wrap: wrap;align-items: center;padding:0 4rem">
-                                <div style="margin:0 2rem 1rem 0;" :style="{ display: t ? 'block' : 'none' }"
-                                    v-for="(t, i) in item.key" :key="i">第{{ i + 1 }} {{ t ==
-                                        1 ? '25及高于' : '低于25' }}</div>
-                            </div>
-
-                            <div style="text-align: right;padding-right:4rem" v-if="item.amount">
-                                <div>本金 {{ item.amount }}</div>
-                                <div>预期返还</div>
-                                <div>{{ item.amount * item.p }}</div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- 特殊球颜色 -->
-                    <div class="bet_item" v-if="[16].includes(item.code)">
-                        <div class="bet_info">
-                            <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
-                            <div class="bet_info_name">{{ typeMap[item.code] }}</div>
-                            <div class="bet_info_per">{{ item.p }}</div>
-                            <div class="bet_ipt_box">
-                                <span></span>
-                                <input type="number" v-model="item.amount" class="bet_ipt" placeholder="本金">
-                            </div>
-                        </div>
-
-                        <div style="display: flex;align-items: center;justify-content: space-between;">
-                            <div style="display: flex;align-items: center;padding: 0 4rem">
-                                <div style="width:8rem;height:8rem;border-radius: 50%;margin-right:2rem"
-                                    :style="{ backgroundColor: colorMap[item.key] }"></div>
-                                <span>{{ colorTextMap[item.key] }}</span>
-                            </div>
-
-                            <div style="text-align: right;padding-right:4rem" v-if="item.amount">
-                                <div>本金 {{ item.amount }}</div>
-                                <div>预期返还</div>
-                                <div>{{ item.amount * item.p }}</div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- 球的颜色 -->
-                    <div class="bet_item" v-if="[11].includes(item.code)">
-                        <div class="bet_info">
-                            <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
-                            <div class="bet_info_name">{{ typeMap[item.code] }}</div>
-                            <div class="bet_info_per">{{ item.p }}</div>
-                            <div class="bet_ipt_box">
-                                <span></span>
-                                <input type="number" v-model="item.amount" class="bet_ipt" placeholder="本金">
-                            </div>
-                        </div>
-
-                        <div style="display: flex;align-items: center;justify-content: space-between;">
-                            <div style="display: flex;flex-wrap: wrap;align-items: center;padding: 0 4rem">
-                                <div v-for="(t, i) in item.key" :key="i"
-                                    style="margin:0 2rem 1rem 0;;align-items: center;"
-                                    :style="{ display: t ? 'flex' : 'none' }">
-                                    <div>第{{ i }} </div>
-                                    <div style="width:4rem;height:4rem;border-radius: 50%;margin:0 1rem"
-                                        :style="{ backgroundColor: colorMap[t] }"></div>
-                                    <span>{{ colorTextMap[t] }}</span>
+                                <div style="text-align: right;padding-right:4rem" v-if="item.amount">
+                                    <div>{{ _t('bb14') }} {{ item.amount }}</div>
+                                    <div>{{ _t('bb15') }}</div>
+                                    <div>{{ item.amount * item.p }}</div>
                                 </div>
                             </div>
 
-                            <div style="text-align: right;padding-right:4rem" v-if="item.amount">
-                                <div>本金 {{ item.amount }}</div>
-                                <div>预期返还</div>
-                                <div>{{ item.amount * item.p }}</div>
-                            </div>
                         </div>
-
-                    </div>
-                    <!-- 特别号码/第一个号码 -->
-                    <div class="bet_item" v-if="[15, 10].includes(item.code)">
-                        <div class="bet_info">
-                            <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
-                            <div class="bet_info_name">{{ typeMap[item.code] }}</div>
-                            <div class="bet_info_per">{{ item.p }}</div>
-                            <div class="bet_ipt_box">
-                                <span>{{ item.key.length }}X</span>
-                                <input type="number" v-model="item.amount" class="bet_ipt" placeholder="本金">
-                            </div>
-                        </div>
-
-                        <div style="display: flex;align-items: center;justify-content: space-between;">
-                            <div style="display: flex;flex-wrap: wrap;align-items: center;padding: 0 4rem">
-                                <div :style="{ backgroundColor: getColor(t) }" v-for="(t, i) in item.key" :key="i"
-                                    style="margin:0 1rem 1rem 0;align-items: center;justify-content: center;width: 6rem;height: 6rem;border-radius: 50%;color:#fff;font-weight: bold;display: flex;">
-                                    {{ t }}
+                        <!-- 大小  -->
+                        <div class="bet_item" v-if="[13, 19].includes(item.code)">
+                            <div class="bet_info">
+                                <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
+                                <div class="bet_info_name">{{ typeMap[item.code] }}</div>
+                                <div class="bet_info_per">{{ item.p }}</div>
+                                <div class="bet_ipt_box">
+                                    <span></span>
+                                    <input type="number" v-model="item.amount" class="bet_ipt"
+                                        :placeholder="_t('bb14')">
                                 </div>
                             </div>
+                            <div style="display: flex;align-items: center;justify-content: space-between;">
+                                <div style="display: flex;flex-wrap: wrap;align-items: center;padding:0 4rem">
+                                    <div style="margin:0 2rem 1rem 0;" :style="{ display: t ? 'block' : 'none' }"
+                                        v-for="(t, i) in item.key" :key="i">{{ _t('10') }}{{ i + 1 }} {{ t ==
+                                            1 ? '≥' + bigNum : '<' + bigNum }}</div>
+                                    </div>
 
-                            <div style="text-align: right;padding-right:4rem" v-if="item.amount">
-                                <div>本金 {{ item.amount * item.key.length }}</div>
-                                <div>预期返还</div>
-                                <div>{{ item.amount * item.p }}</div>
+                                    <div style="text-align: right;padding-right:4rem" v-if="item.amount">
+                                        <div>{{ _t('bb14') }} {{ item.amount }}</div>
+                                        <div>{{ _t('bb15') }}</div>
+                                        <div>{{ item.amount * item.p }}</div>
+                                    </div>
+                                </div>
+
                             </div>
-                        </div>
+                            <!-- 特殊球颜色 -->
+                            <div class="bet_item" v-if="[16].includes(item.code)">
+                                <div class="bet_info">
+                                    <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
+                                    <div class="bet_info_name">{{ typeMap[item.code] }}</div>
+                                    <div class="bet_info_per">{{ item.p }}</div>
+                                    <div class="bet_ipt_box">
+                                        <span></span>
+                                        <input type="number" v-model="item.amount" class="bet_ipt"
+                                            :placeholder="_t('bb14')">
+                                    </div>
+                                </div>
 
-                    </div>
-                    <!-- 单式投注 -->
-                    <div class="bet_item" v-if="[9].includes(item.code)">
-                        <div class="bet_info">
-                            <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
-                            <div class="bet_info_name">{{ game.name == 'bet365' ? '选5' : typeMap[item.code] }}</div>
-                            <div class="bet_info_per">{{ item.special ? item.p2 : item.p }}</div>
-                            <div class="bet_ipt_box">
-                                <span>{{ item.times ? item.times + 'X' : '' }}</span>
-                                <input type="number" v-model="item.amount" class="bet_ipt" placeholder="本金">
+                                <div style="display: flex;align-items: center;justify-content: space-between;">
+                                    <div style="display: flex;align-items: center;padding: 0 4rem">
+                                        <div style="width:8rem;height:8rem;border-radius: 50%;margin-right:2rem"
+                                            :style="{ backgroundColor: colorMap[item.key] }"></div>
+                                        <span>{{ colorTextMap[item.key] }}</span>
+                                    </div>
+
+                                    <div style="text-align: right;padding-right:4rem" v-if="item.amount">
+                                        <div>{{ _t('bb14') }} {{ item.amount }}</div>
+                                        <div>{{ _t('bb15') }}</div>
+                                        <div>{{ item.amount * item.p }}</div>
+                                    </div>
+                                </div>
+
                             </div>
-                        </div>
+                            <!-- 球的颜色 -->
+                            <div class="bet_item" v-if="[11].includes(item.code)">
+                                <div class="bet_info">
+                                    <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
+                                    <div class="bet_info_name">{{ typeMap[item.code] }}</div>
+                                    <div class="bet_info_per">{{ item.p }}</div>
+                                    <div class="bet_ipt_box">
+                                        <span></span>
+                                        <input type="number" v-model="item.amount" class="bet_ipt"
+                                            :placeholder="_t('bb14')">
+                                    </div>
+                                </div>
+
+                                <div style="display: flex;align-items: center;justify-content: space-between;">
+                                    <div style="display: flex;flex-wrap: wrap;align-items: center;padding: 0 4rem">
+                                        <div v-for="(t, i) in item.key" :key="i"
+                                            style="margin:0 2rem 1rem 0;;align-items: center;"
+                                            :style="{ display: t ? 'flex' : 'none' }">
+                                            <div>{{ _t('10') }}{{ i }} </div>
+                                            <div style="width:4rem;height:4rem;border-radius: 50%;margin:0 1rem"
+                                                :style="{ backgroundColor: colorMap[t] }"></div>
+                                            <span>{{ colorTextMap[t] }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div style="text-align: right;padding-right:4rem" v-if="item.amount">
+                                        <div>{{ _t('bb14') }} {{ item.amount }}</div>
+                                        <div>{{ _t('bb15') }}</div>
+                                        <div>{{ item.amount * item.p }}</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- 特别号码/第一个号码 -->
+                            <div class="bet_item" v-if="[15, 10].includes(item.code)">
+                                <div class="bet_info">
+                                    <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
+                                    <div class="bet_info_name">{{ typeMap[item.code] }}</div>
+                                    <div class="bet_info_per">{{ item.p }}</div>
+                                    <div class="bet_ipt_box">
+                                        <span>{{ item.key.length }}X</span>
+                                        <input type="number" v-model="item.amount" class="bet_ipt"
+                                            :placeholder="_t('bb14')">
+                                    </div>
+                                </div>
+
+                                <div style="display: flex;align-items: center;justify-content: space-between;">
+                                    <div style="display: flex;flex-wrap: wrap;align-items: center;padding: 0 4rem">
+                                        <div :style="{ backgroundColor: getColor(t) }" v-for="(t, i) in item.key"
+                                            :key="i"
+                                            style="margin:0 1rem 1rem 0;align-items: center;justify-content: center;width: 6rem;height: 6rem;border-radius: 50%;color:#fff;font-weight: bold;display: flex;">
+                                            {{ t }}
+                                        </div>
+                                    </div>
+
+                                    <div style="text-align: right;padding-right:4rem" v-if="item.amount">
+                                        <div>{{ _t('bb14') }} {{ item.amount * item.key.length }}</div>
+                                        <div>{{ _t('bb15') }}</div>
+                                        <div>{{ item.amount * item.p }}</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- 单式投注 -->
+                            <div class="bet_item" v-if="[9].includes(item.code)">
+                                <div class="bet_info">
+                                    <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
+                                    <div class="bet_info_name">{{ game.name == 'bet365' ? _t('bb16') :
+                                        typeMap[item.code] }}
+                                    </div>
+                                    <div class="bet_info_per">{{ item.special ? item.p2 : item.p }}</div>
+                                    <div class="bet_ipt_box">
+                                        <span>{{ item.times ? item.times + 'X' : '' }}</span>
+                                        <input type="number" v-model="item.amount" class="bet_ipt"
+                                            :placeholder="_t('bb14')">
+                                    </div>
+                                </div>
 
 
 
-                        <div style="display: flex;align-items: center;justify-content: space-between;">
-                            <div style="display: flex;flex-wrap: wrap;align-items: center;padding: 0 4rem">
-                                <div :style="{ backgroundColor: getColor(t) }" v-for="(t, i) in item.key" :key="i"
-                                    style="margin:0 1rem 1rem 0;align-items: center;justify-content: center;width: 6rem;height: 6rem;border-radius: 50%;color:#fff;font-weight: bold;display: flex;">
-                                    {{ t }}
+                                <div style="display: flex;align-items: center;justify-content: space-between;">
+                                    <div style="display: flex;flex-wrap: wrap;align-items: center;padding: 0 4rem">
+                                        <div :style="{ backgroundColor: getColor(t) }" v-for="(t, i) in item.key"
+                                            :key="i"
+                                            style="margin:0 1rem 1rem 0;align-items: center;justify-content: center;width: 6rem;height: 6rem;border-radius: 50%;color:#fff;font-weight: bold;display: flex;">
+                                            {{ t }}
+                                        </div>
+                                    </div>
+                                    <div style="text-align: right;padding-right:4rem" v-if="item.amount">
+                                        <div>{{ _t('bb14') }} {{ item.times ? item.times * item.amount : item.amount }}
+                                        </div>
+                                        <div>{{ _t('bb15') }}</div>
+                                        <div>{{ item.times ? item.times * item.amount * (item.special ? item.p2 :
+                                            item.p) :
+                                            item.amount * (item.special ? item.p2 : item.p) }}</div>
+                                    </div>
+
+                                </div>
+
+                                <!-- 365 -->
+                                <div style="padding: 2rem 4rem;" v-if="game.name == 'bet365'">
+                                    <div
+                                        style="display: flex;border:1px solid #eee;align-items: stretch;height: 10rem;">
+                                        <div @click="item.times = null"
+                                            style="flex: 1;border-right: 1px solid #eee;padding-left: 2rem;display: flex;align-items: center;">
+                                            {{ _t('bb17') }}</div>
+                                        <div @click="item.times = 5"
+                                            :style="{ backgroundColor: item.times == 5 ? '#eee' : '' }"
+                                            style="flex: 1;border-right: 1px solid #eee;padding-left: 2rem;display: flex;align-items: center;">
+                                            {{ _t('bb18') }}</div>
+                                        <div @click="item.times = 10"
+                                            :style="{ backgroundColor: item.times == 10 ? '#eee' : '' }"
+                                            style="flex: 1;border-right: 1px solid #eee;padding-left: 2rem;display: flex;align-items: center;">
+                                            {{ _t('bb19') }}</div>
+                                        <div @click="item.times = 20"
+                                            :style="{ backgroundColor: item.times == 20 ? '#eee' : '' }"
+                                            style="flex: 1;padding-left: 1rem;display: flex;align-items: center;">{{
+                                                _t('bb20') }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 非365 -->
+                                <div style="padding: 2rem 4rem;" v-else>
+                                    <van-checkbox v-model="item.special" shape="square">{{ _t('bb21') }}</van-checkbox>
                                 </div>
                             </div>
-                            <div style="text-align: right;padding-right:4rem" v-if="item.amount">
-                                <div>本金 {{ item.times ? item.times * item.amount : item.amount }}</div>
-                                <div>预期返还</div>
-                                <div>{{ item.times ? item.times * item.amount * (item.special ? item.p2 : item.p) :
-                                    item.amount * (item.special ? item.p2 : item.p) }}</div>
-                            </div>
-
-                        </div>
-
-                        <!-- 365 -->
-                        <div style="padding: 2rem 4rem;" v-if="game.name == 'bet365'">
-                            <div style="display: flex;border:1px solid #eee;align-items: stretch;height: 10rem;">
-                                <div @click="item.times = null"
-                                    style="flex: 1;border-right: 1px solid #eee;padding-left: 2rem;display: flex;align-items: center;">
-                                    下次摇奖</div>
-                                <div @click="item.times = 5" :style="{ backgroundColor: item.times == 5 ? '#eee' : '' }"
-                                    style="flex: 1;border-right: 1px solid #eee;padding-left: 2rem;display: flex;align-items: center;">
-                                    下5</div>
-                                <div @click="item.times = 10"
-                                    :style="{ backgroundColor: item.times == 10 ? '#eee' : '' }"
-                                    style="flex: 1;border-right: 1px solid #eee;padding-left: 2rem;display: flex;align-items: center;">
-                                    下10</div>
-                                <div @click="item.times = 20"
-                                    :style="{ backgroundColor: item.times == 20 ? '#eee' : '' }"
-                                    style="flex: 1;padding-left: 1rem;display: flex;align-items: center;">下20</div>
-                            </div>
-                        </div>
-                        <!-- 非365 -->
-                        <div style="padding: 2rem 4rem;" v-else>
-                            <van-checkbox v-model="item.special" shape="square">包括特别号码</van-checkbox>
-                        </div>
-                    </div>
-                    <!-- 组合投注 -->
-                    <div class="bet_item" v-if="[14].includes(item.code)">
-                        <div class="bet_info">
-                            <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
-                            <div class="bet_info_name">{{ typeMap[item.code] }}</div>
-                            <div style="flex:1"></div>
-                        </div>
-
-                        <div
-                            style="display: flex;align-items: center;justify-content: space-between;padding-right:4rem">
-                            <div style="display: flex;flex-wrap: wrap;align-items: center;padding: 0 4rem">
-                                <div :style="{ backgroundColor: getColor(t) }" v-for="(t, i) in item.key" :key="i"
-                                    style="margin:0 1rem 1rem 0;align-items: center;justify-content: center;width: 6rem;height: 6rem;border-radius: 50%;color:#fff;font-weight: bold;display: flex;">
-                                    {{ t }}
+                            <!-- 组合投注 -->
+                            <div class="bet_item" v-if="[14].includes(item.code)">
+                                <div class="bet_info">
+                                    <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
+                                    <div class="bet_info_name">{{ typeMap[item.code] }}</div>
+                                    <div style="flex:1"></div>
                                 </div>
+
+                                <div
+                                    style="display: flex;align-items: center;justify-content: space-between;padding-right:4rem">
+                                    <div style="display: flex;flex-wrap: wrap;align-items: center;padding: 0 4rem">
+                                        <div :style="{ backgroundColor: getColor(t) }" v-for="(t, i) in item.key"
+                                            :key="i"
+                                            style="margin:0 1rem 1rem 0;align-items: center;justify-content: center;width: 6rem;height: 6rem;border-radius: 50%;color:#fff;font-weight: bold;display: flex;">
+                                            {{ t }}
+                                        </div>
+                                    </div>
+
+                                    <van-checkbox v-model="item.special" shape="square">{{ _t('bb21') }}</van-checkbox>
+                                </div>
+
+                                <!-- 1串1 -->
+                                <div class="bet_info" style="border-top:1px solid #eee;margin-top:4rem">
+                                    <div class="bet_info_name" style="font-size: 3.4rem;margin-left: 4rem;">{{
+                                        _t('bb22') }}</div>
+                                    <div class="bet_info_per">{{ getGroupP(1, item.special) }}</div>
+                                    <div class="bet_ipt_box">
+                                        <span>{{ combination(item.key.length, 1) }}X</span>
+                                        <input type="number" v-model="item.amount1" class="bet_ipt"
+                                            :placeholder="_t('bb14')">
+                                    </div>
+
+                                    <div v-if="item.amount1" style="width: 100%;text-align: right;padding: 4rem;">
+                                        <div>{{ _t('bb14') }} {{ item.amount1 * combination(item.key.length, 1) }}</div>
+                                        <div>{{ _t('bb15') }} {{ item.amount1 * Math.min(item.key.length, (item.special
+                                            ?
+                                            game.lottery_number : game.lottery_number -
+                                            1)) * getGroupP(1, item.special)
+                                            }}</div>
+                                    </div>
+                                </div>
+
+                                <div style="color: burlywood;font-size: 3.2rem;padding-left: 4rem"
+                                    @click="item.switch = !item.switch">{{
+                                        !item.switch ? _t('bb23') : _t('bb24') }}</div>
+
+                                <!-- 2串1 -->
+                                <div v-if="item.key.length >= 2 && item.switch" class="bet_info"
+                                    style="border-top:1px solid #eee;margin-top:4rem">
+                                    <div class="bet_info_name" style="font-size: 3.4rem;margin-left: 4rem;">{{
+                                        _t('bb25') }}</div>
+                                    <div class="bet_info_per">{{ getGroupP(2, item.special) }}</div>
+                                    <div class="bet_ipt_box">
+                                        <span>{{ combination(item.key.length, 2) }}X</span>
+                                        <input type="number" v-model="item.amount2" class="bet_ipt"
+                                            :placeholder="_t('bb14')">
+                                    </div>
+
+                                    <div v-if="item.amount2" style="width: 100%;text-align: right;padding: 4rem;">
+                                        <div>{{ _t('bb14') }} {{ item.amount2 * combination(item.key.length, 2) }}</div>
+                                        <div>{{ _t('bb15') }} {{ item.amount2 * Math.min(item.key.length, (item.special
+                                            ?
+                                            game.lottery_number : game.lottery_number -
+                                            1)) * getGroupP(2, item.special)
+                                            }}</div>
+                                    </div>
+                                </div>
+
+                                <!-- 3串1 -->
+                                <div v-if="item.key.length >= 3 && item.switch" class="bet_info"
+                                    style="border-top:1px solid #eee;margin-top:4rem">
+                                    <div class="bet_info_name" style="font-size: 3.4rem;margin-left: 4rem;">{{
+                                        _t('bb26') }}</div>
+                                    <div class="bet_info_per">{{ getGroupP(3, item.special) }}</div>
+                                    <div class="bet_ipt_box">
+                                        <span>{{ combination(item.key.length, 3) }}X</span>
+                                        <input type="number" v-model="item.amount3" class="bet_ipt"
+                                            :placeholder="_t('bb14')">
+                                    </div>
+
+                                    <div v-if="item.amount3" style="width: 100%;text-align: right;padding: 4rem;">
+                                        <div>{{ _t('bb14') }} {{ item.amount3 * combination(item.key.length, 3) }}</div>
+                                        <div>{{ _t('bb15') }} {{ item.amount3 * Math.min(item.key.length, (item.special
+                                            ?
+                                            game.lottery_number : game.lottery_number -
+                                            1)) * getGroupP(3, item.special)
+                                            }}</div>
+                                    </div>
+                                </div>
+
+                                <!-- 4串1 -->
+                                <div v-if="item.key.length >= 4 && item.switch" class="bet_info"
+                                    style="border-top:1px solid #eee;margin-top:4rem">
+                                    <div class="bet_info_name" style="font-size: 3.4rem;margin-left: 4rem;">{{
+                                        _t('bb27') }}</div>
+                                    <div class="bet_info_per">{{ getGroupP(4, item.special) }}</div>
+                                    <div class="bet_ipt_box">
+                                        <span>{{ combination(item.key.length, 4) }}X</span>
+                                        <input type="number" v-model="item.amount4" class="bet_ipt"
+                                            :placeholder="_t('bb14')">
+                                    </div>
+
+                                    <div v-if="item.amount4" style="width: 100%;text-align: right;padding: 4rem;">
+                                        <div>{{ _t('bb14') }} {{ item.amount4 * combination(item.key.length, 4) }}</div>
+                                        <div>{{ _t('bb15') }} {{ item.amount4 * Math.min(item.key.length, (item.special
+                                            ?
+                                            game.lottery_number : game.lottery_number -
+                                            1)) * getGroupP(4, item.special)
+                                            }}</div>
+                                    </div>
+                                </div>
+
+                                <!-- 5串1 -->
+                                <div v-if="item.key.length >= 5 && item.switch" class="bet_info"
+                                    style="border-top:1px solid #eee;margin-top:4rem">
+                                    <div class="bet_info_name" style="font-size: 3.4rem;margin-left: 4rem;">{{
+                                        _t('bb28') }}</div>
+                                    <div class="bet_info_per">{{ getGroupP(5, item.special) }}</div>
+                                    <div class="bet_ipt_box">
+                                        <span>{{ combination(item.key.length, 5) }}X</span>
+                                        <input type="number" v-model="item.amount5" class="bet_ipt"
+                                            :placeholder="_t('bb14')">
+                                    </div>
+
+                                    <div v-if="item.amount5" style="width: 100%;text-align: right;padding: 4rem;">
+                                        <div>{{ _t('bb14') }} {{ item.amount5 * combination(item.key.length, 5) }}</div>
+                                        <div>{{ _t('bb15') }} {{ item.amount5 * Math.min(item.key.length, (item.special
+                                            ?
+                                            game.lottery_number : game.lottery_number -
+                                            1)) * getGroupP(5, item.special)
+                                            }}</div>
+                                    </div>
+                                </div>
+
                             </div>
 
-                            <van-checkbox v-model="item.special" shape="square">包括特别号码</van-checkbox>
-                        </div>
-
-                        <!-- 1串1 -->
-                        <div class="bet_info" style="border-top:1px solid #eee;margin-top:4rem">
-                            <div class="bet_info_name" style="font-size: 3.4rem;margin-left: 4rem;">单式投注</div>
-                            <div class="bet_info_per">{{ getGroupP(1, item.special) }}</div>
-                            <div class="bet_ipt_box">
-                                <span>{{ combination(item.key.length, 1) }}X</span>
-                                <input type="number" v-model="item.amount1" class="bet_ipt" placeholder="本金">
-                            </div>
-
-                            <div v-if="item.amount1" style="width: 100%;text-align: right;padding: 4rem;">
-                                <div>本金 {{ item.amount1 * combination(item.key.length, 1) }}</div>
-                                <div>预期返还 {{ item.amount1 * Math.min(item.key.length, (item.special ?
-                                    game.lottery_number : game.lottery_number -
-                                    1)) * getGroupP(1, item.special)
-                                    }}</div>
-                            </div>
-                        </div>
-
-                        <div style="color: burlywood;font-size: 3.2rem;padding-left: 4rem"
-                            @click="item.switch = !item.switch">{{
-                                !item.switch ? '展开更多' : '收起' }}</div>
-
-                        <!-- 2串1 -->
-                        <div v-if="item.key.length >= 2 && item.switch" class="bet_info"
-                            style="border-top:1px solid #eee;margin-top:4rem">
-                            <div class="bet_info_name" style="font-size: 3.4rem;margin-left: 4rem;">双式投注</div>
-                            <div class="bet_info_per">{{ getGroupP(2, item.special) }}</div>
-                            <div class="bet_ipt_box">
-                                <span>{{ combination(item.key.length, 2) }}X</span>
-                                <input type="number" v-model="item.amount2" class="bet_ipt" placeholder="本金">
-                            </div>
-
-                            <div v-if="item.amount2" style="width: 100%;text-align: right;padding: 4rem;">
-                                <div>本金 {{ item.amount2 * combination(item.key.length, 2) }}</div>
-                                <div>预期返还 {{ item.amount2 * Math.min(item.key.length, (item.special ?
-                                    game.lottery_number : game.lottery_number -
-                                    1)) * getGroupP(2, item.special)
-                                    }}</div>
-                            </div>
-                        </div>
-
-                        <!-- 3串1 -->
-                        <div v-if="item.key.length >= 3 && item.switch" class="bet_info"
-                            style="border-top:1px solid #eee;margin-top:4rem">
-                            <div class="bet_info_name" style="font-size: 3.4rem;margin-left: 4rem;">三式投注</div>
-                            <div class="bet_info_per">{{ getGroupP(3, item.special) }}</div>
-                            <div class="bet_ipt_box">
-                                <span>{{ combination(item.key.length, 3) }}X</span>
-                                <input type="number" v-model="item.amount3" class="bet_ipt" placeholder="本金">
-                            </div>
-
-                            <div v-if="item.amount3" style="width: 100%;text-align: right;padding: 4rem;">
-                                <div>本金 {{ item.amount3 * combination(item.key.length, 3) }}</div>
-                                <div>预期返还 {{ item.amount3 * Math.min(item.key.length, (item.special ?
-                                    game.lottery_number : game.lottery_number -
-                                    1)) * getGroupP(3, item.special)
-                                    }}</div>
-                            </div>
-                        </div>
-
-                        <!-- 4串1 -->
-                        <div v-if="item.key.length >= 4 && item.switch" class="bet_info"
-                            style="border-top:1px solid #eee;margin-top:4rem">
-                            <div class="bet_info_name" style="font-size: 3.4rem;margin-left: 4rem;">4串1</div>
-                            <div class="bet_info_per">{{ getGroupP(4, item.special) }}</div>
-                            <div class="bet_ipt_box">
-                                <span>{{ combination(item.key.length, 4) }}X</span>
-                                <input type="number" v-model="item.amount4" class="bet_ipt" placeholder="本金">
-                            </div>
-
-                            <div v-if="item.amount4" style="width: 100%;text-align: right;padding: 4rem;">
-                                <div>本金 {{ item.amount4 * combination(item.key.length, 4) }}</div>
-                                <div>预期返还 {{ item.amount4 * Math.min(item.key.length, (item.special ?
-                                    game.lottery_number : game.lottery_number -
-                                    1)) * getGroupP(4, item.special)
-                                    }}</div>
-                            </div>
-                        </div>
-
-                        <!-- 5串1 -->
-                        <div v-if="item.key.length >= 5 && item.switch" class="bet_info"
-                            style="border-top:1px solid #eee;margin-top:4rem">
-                            <div class="bet_info_name" style="font-size: 3.4rem;margin-left: 4rem;">5串1</div>
-                            <div class="bet_info_per">{{ getGroupP(5, item.special) }}</div>
-                            <div class="bet_ipt_box">
-                                <span>{{ combination(item.key.length, 5) }}X</span>
-                                <input type="number" v-model="item.amount5" class="bet_ipt" placeholder="本金">
-                            </div>
-
-                            <div v-if="item.amount5" style="width: 100%;text-align: right;padding: 4rem;">
-                                <div>本金 {{ item.amount5 * combination(item.key.length, 5) }}</div>
-                                <div>预期返还 {{ item.amount5 * Math.min(item.key.length, (item.special ?
-                                    game.lottery_number : game.lottery_number -
-                                    1)) * getGroupP(5, item.special)
-                                    }}</div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </template>
+                    </template>
+                </div>
+                <div class="bet_bottom" @click="goBet"
+                    :style="{ opacity: (allBet[0] && allBet[0] * 1 > 0) ? (loading ? '0.5' : '1') : '0.5' }">
+                    <div>{{ _t('9') }} {{ pre }}{{ allBet[0] }}</div>
+                    <div class="return" v-if="allBet[1]">{{ _t('bb15') }} {{ pre }}{{ allBet[1] }}</div>
+                </div>
             </div>
-            <div class="bet_bottom" @click="goBet"
-                :style="{ opacity: (allBet[0] && allBet[0] * 1 > 0) ? (loading ? '0.5' : '1') : '0.5' }">
-                <div>投注 {{ pre }}{{ allBet[0] }}</div>
-                <div class="return" v-if="allBet[1]">预期返还 {{ pre }}{{ allBet[1] }}</div>
-            </div>
-        </div>
-    </van-popup>
+        </van-popup>
 </template>
 
 <script setup>
@@ -508,6 +542,8 @@ import TotalBet from "./components/TotalBet.vue"
 import http from "@/api/index"
 import store from "@/store"
 import { showToast } from "vant"
+import { _t } from "@/lang/index";
+import { _typeMap } from "@/tools/utils"
 
 const NumberRef = ref()
 const BallColorRef = ref()
@@ -550,7 +586,7 @@ const addToList = () => {
     OneRef.value && OneRef.value.clear()
     TotalRef.value && TotalRef.value.clear()
 }
-const typeMap = computed(() => store.state.typeMap || {})
+const typeMap = computed(() => _typeMap() || {})
 
 
 // 投注
@@ -610,7 +646,7 @@ const removeItem = i => {
 const goBet = () => {
     if (!allBet.value[0] || allBet.value[0] * 1 < 0) return
     if (loading.value) return
-    if ((userInfo.value.money * 1) < (allBet.value[0] * 1)) return showToast('余额不足')
+    if ((userInfo.value.money * 1) < (allBet.value[0] * 1)) return showToast(_t('bb29'))
     loading.value = true
     http.game_expect({
         lotto_id: game.value.id
@@ -703,7 +739,7 @@ const goBet = () => {
                     if (res.code == 1) {
                         showBottom.value = false
                         betList.value = []
-                        showToast('投注成功')
+                        showToast(_t('bb30'))
                         store.dispatch('updateUser')
                     } else {
                         showToast(res.msg)

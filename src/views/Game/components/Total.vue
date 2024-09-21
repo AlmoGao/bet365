@@ -2,11 +2,11 @@
 <template>
     <div class="bet_total" v-if="open">
         <van-tabs v-model:active="active" shrink>
-            <van-tab title="总和"></van-tab>
+            <van-tab :title="_t('bb64')"></van-tab>
         </van-tabs>
 
         <div class="content">
-            <div class="tip">选择范围：{{ game.max_number }}个号码总和（不包括特别号码）</div>
+            <div class="tip">{{ _t('bb65', { t1: game.max_number }) }}</div>
 
             <div class="boxs">
                 <div class="box" @click="clickItem(key, val)" v-for="(val, key) in props.config.sum_json" :key="key"
@@ -23,6 +23,7 @@
 <script setup>
 import { ref, computed } from "vue"
 import store from "@/store"
+import { _t } from "@/lang/index";
 
 const emits = defineEmits(['preBet'])
 

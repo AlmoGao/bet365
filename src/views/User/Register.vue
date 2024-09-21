@@ -3,7 +3,9 @@
   <div class="page-register">
 
 
-    <div class="title">{{ _t("t16") }}</div>
+    <div class="title"><span>{{ _t("t16") }}</span>
+      <LangIcon />
+    </div>
 
 
 
@@ -82,6 +84,7 @@ import { showToast } from 'vant';
 import store from "@/store"
 import router from "@/router"
 import { _t } from "@/lang/index";
+import LangIcon from "@/components/LangIcon.vue"
 
 const activeTab = ref(1)
 const showPass1 = ref(false)
@@ -156,6 +159,9 @@ const goRegister = () => {
   .title {
     font-size: 6rem;
     margin: 8rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .tabs {

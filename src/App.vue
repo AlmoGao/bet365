@@ -10,9 +10,9 @@ import { _changeLang } from "@/lang/index";
 http.config().then(res => {
   store.commit('setConfig', res || {})
   document.title = res.name || 'bet365'
-  // if (!localStorage.getItem("lang")) {
-  //   _changeLang(res.lang)
-  // }
+  if (!localStorage.getItem("lang")) {
+    _changeLang(res.lang || 'zh-cn')
+  }
 })
 
 if (store.state.token) {
