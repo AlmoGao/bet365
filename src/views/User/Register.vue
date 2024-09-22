@@ -65,7 +65,7 @@
         </div>
       </template>
 
-      <!-- <div class="tip" style="text-align: right;color: #4936DF;">忘记密码</div> -->
+      <!-- <div class="tip" style="text-align: right;color: #8475f9;">忘记密码</div> -->
       <van-button :loading="loading" class="btn" type="primary" size="large" @click="goRegister">{{ _t("t21")
         }}</van-button>
 
@@ -176,7 +176,7 @@ const goRegister = () => {
     }
 
     .active_tab {
-      color: #4936DF;
+      color: #8475f9;
     }
   }
 }

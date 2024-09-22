@@ -33,6 +33,9 @@
                     <span>{{ _t('21') }}</span>
                     <span>{{ parseTime(item.createtime) }}</span>
                 </div>
+                <div class="item_box" v-if="item.remark">
+                    <span>{{ item.remark }}</span>
+                </div>
             </div>
         </div>
         <van-empty v-if="!list.length" />
@@ -99,7 +102,7 @@ getList()
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                height: 8rem;
+                min-height: 8rem;
 
                 .num {
                     color: #d50f3a;

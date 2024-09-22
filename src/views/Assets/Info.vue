@@ -83,7 +83,7 @@ import Top from '@/components/Top.vue';
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                color: #000;
+                color: #fff;
                 font-weight: bold;
 
                 img {

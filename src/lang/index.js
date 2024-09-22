@@ -18,7 +18,7 @@ const messages = {
   pt
 };
 
-const lang = localStorage.getItem("lang") || "zh-cn";
+const lang = localStorage.getItem("lang") || "pt";
 const i18n = createI18n({
   messages,
   locale: lang,

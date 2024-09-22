@@ -14,7 +14,7 @@
       </van-swipe-item>
     </van-swipe> -->
 
-    <van-notice-bar class="notice-bar" color="#555" background="#F3F6F8" left-icon="volume-o" :text="notice" />
+    <!-- <van-notice-bar class="notice-bar" color="#555" background="#F3F6F8" left-icon="volume-o" :text="notice" /> -->
 
 
     <!-- 玩法 -->
@@ -86,7 +86,11 @@
     </div>
 
 
-
+    <div class="notice_list">
+      <div class="notice_box">
+        <div class="norice_item" v-for="(item, i) in notices">{{ item }}</div>
+      </div>
+    </div>
 
     <van-dialog v-model:show="showMessage" title="" :show-cancel-button="false" @confirm="confirmMessage">
       <div v-html="messageContent" style="padding:1rem 4rem"></div>
@@ -106,7 +110,7 @@ import LangIcon from "@/components/LangIcon.vue"
 
 const token = computed(() => store.state.token || '')
 const carousel = computed(() => store.state.config.carousel || []) // 轮播
-// const notice = computed(() => store.state.config.notice || '') // 公告
+const notices = computed(() => store.state.config.notice || []) // 公告
 const notice = ref('bet365')
 const logo = computed(() => store.state.config.logo || '')
 
@@ -178,9 +182,34 @@ const jump = name => {
 </script>
 
 <style lang="less" scoped>
+@keyframes mymove {
+  from {
+    transform: translateY(calc(100% - 40vh));
+  }
+
+  to {
+    transform: translateY(calc(-100% + 40vh));
+  }
+}
+
 .page-home {
   padding: 4rem;
   padding-bottom: 22rem;
+
+  .notice_list {
+    padding: 4rem;
+    height: 40vh;
+    overflow: hidden;
+
+    .notice_box {
+      animation: mymove 10s linear infinite;
+    }
+
+    .norice_item {
+      text-align: center;
+      height: 10rem;
+    }
+  }
 
   .games {
     display: flex;
@@ -265,7 +294,7 @@ const jump = name => {
 
     .curr_nav {
       background-color: #ECECFC;
-      color: #4936DF;
+      color: #8475f9;
     }
   }
 

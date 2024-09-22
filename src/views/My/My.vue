@@ -12,6 +12,8 @@
                <!-- <img class="copy" src="@/assets/my/copy.svg" alt="img"> -->
             </div>
             <div>{{ _t('1') }}：{{ (config.currency || '') + ' ' + userInfo.money }}</div>
+            <div>{{ _t('25') }}：{{ userInfo.score }}</div>
+            <div v-if="userInfo.level">{{ _t('26') }}：{{ userInfo.level }}</div>
          </div>
       </div>
 
@@ -38,6 +40,18 @@
       <!-- 通用 -->
       <div class="subtitle">{{ _t('t81') }}</div>
       <div class="navs">
+
+         <div class="nav" @click="jumpLink">
+            <img src="@/assets/assets/nav-1.svg" alt="img">
+            <div class="info">{{ _t('11') }}</div>
+            <van-icon name="arrow" />
+         </div>
+         <div class="nav" @click="jump('withdraw')">
+            <img src="@/assets/assets/nav-2.svg" alt="img">
+            <div class="info">{{ _t('t113') }}</div>
+            <van-icon name="arrow" />
+         </div>
+
          <div class="nav" @click="jump('hisory')">
             <img src="@/assets/my/nav1.jpeg" alt="img">
             <div class="info">{{ _t('3') }}</div>
@@ -153,7 +167,7 @@ const goCustomer = () => {
          .title {
             font-size: 5rem;
             font-weight: bold;
-            color: #000;
+            color: #fff;
             display: flex;
             align-items: center;
 
@@ -167,7 +181,7 @@ const goCustomer = () => {
    }
 
    .subtitle {
-      background-color: #F0F0F0;
+      background-color: #333;
       padding: 3rem 4rem;
    }
 

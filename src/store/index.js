@@ -11,6 +11,7 @@ export default createStore({
     config: {},
     currGame: {},
     types: [],
+    actives: []
   },
   mutations: {
     setToken(state, val) {
@@ -27,6 +28,9 @@ export default createStore({
     },
     setTypes(state, val) {
       state.types = val
+    },
+    setActives(state, val) {
+      state.actives = val
     },
   },
   actions: {

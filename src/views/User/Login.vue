@@ -39,7 +39,7 @@
         </div>
       </template>
 
-      <!-- <div class="tip" style="text-align: right;color: #4936DF;">忘记密码</div> -->
+      <!-- <div class="tip" style="text-align: right;color: #8475f9;">忘记密码</div> -->
       <van-button :loading="loading" @click="submit" class="btn" type="primary" size="large">{{ _t('t10')
         }}</van-button>
 
@@ -135,7 +135,7 @@ const submit = () => {
     }
 
     .active_tab {
-      color: #4936DF;
+      color: #8475f9;
     }
   }
 }

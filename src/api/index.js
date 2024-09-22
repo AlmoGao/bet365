@@ -8,6 +8,12 @@ class HttpService {
       data,
     });
   }
+  activity() {
+    // 活动
+    return http("/api/index/activity", {
+      method: "get",
+    });
+  }
   c_list() {
     // 投注类型
     return http("/api/lotto/c_list", {

@@ -11,7 +11,7 @@ http.config().then(res => {
   store.commit('setConfig', res || {})
   document.title = res.name || 'bet365'
   if (!localStorage.getItem("lang")) {
-    _changeLang(res.lang || 'zh-cn')
+    _changeLang(res.lang || 'pt')
   }
 })
 
@@ -46,7 +46,7 @@ window.addEventListener('resize', setRemBasedOnWindow);
 <style lang="less">
 :root,
 :host {
-  --van-primary-color: #4936DF !important;
+  --van-primary-color: #8475f9 !important;
 }
 
 html,
@@ -75,8 +75,8 @@ body {
 
 #app {
   font-size: 3.2rem;
-  background-color: #fff;
-  color: #333;
+  background-color: #282828;
+  color: #eee;
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
@@ -154,7 +154,7 @@ input {
     .ipt_btn {
       padding: 2rem;
       border-radius: 1rem;
-      background-color: #4936DF;
+      background-color: #8475f9;
       color: #fff;
     }
   }
@@ -169,7 +169,7 @@ input {
 
   .link {
     margin: 4rem 0;
-    color: #4936DF;
+    color: #8475f9;
   }
 
   .tip {
@@ -177,9 +177,17 @@ input {
     margin-top: 4rem;
 
     .a {
-      color: #4936DF;
+      color: #8475f9;
       text-decoration: underline;
     }
+  }
+}
+
+.van-tabs__nav {
+  background-color: #282828 !important;
+
+  .van-tab--active {
+    color: #fff !important
   }
 }
 </style>

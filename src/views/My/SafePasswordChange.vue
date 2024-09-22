@@ -115,7 +115,7 @@ const submit = () => {
 
         .text-btn {
             margin-top: 6rem;
-            color: #4936DF;
+            color: #8475f9;
         }
     }
 }

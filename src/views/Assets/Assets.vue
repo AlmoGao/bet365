@@ -17,6 +17,11 @@
 
             <div class="num">{{ show ? (config.currency || '') + ' ' + userInfo.money : '******' }}</div>
 
+
+            <div v-for="(item, i) in actives" :key="i" @click="openItem(item)">
+                <img style="width:100%;height:auto" :src="actives[0].cover_image" alt="cover">
+            </div>
+
             <div class="navs">
                 <div class="nav" @click="jumpLink">
                     <img src="@/assets/assets/nav-1.svg" alt="img">
@@ -42,6 +47,13 @@
             </div>
         </div>
     </div>
+
+    <!-- 活动弹窗 -->
+    <van-dialog v-model:show="showAd" :title="''" :show-cancel-button="false">
+        <div style="max-height: 60vh;overflow-y: auto;">
+            <img v-for="(item, i) in activesPics" :key="i" style="width:100%;height:auto" :src="item" alt="cover">
+        </div>
+    </van-dialog>
 </template>
 
 <script setup>
@@ -49,6 +61,7 @@ import { ref, computed } from "vue"
 import router from "@/router";
 import store from "@/store"
 import { _t } from "@/lang/index";
+import http from "@/api/index"
 store.dispatch('updateUser')
 const userInfo = computed(() => store.state.userInfo || {})
 const currency = computed(() => store.state.config.currency || 'USDT')
@@ -56,6 +69,13 @@ const config = computed(() => store.state.config)
 
 const activeTab = ref(0)
 const show = ref(true)
+const actives = computed(() => store.state.actives || [])
+const activesPics = ref([])
+const showAd = ref(false)
+const openItem = item => {
+    activesPics.value = item.content_images.split(',')
+    showAd.value = true
+}
 
 const jumpLink = () => {
     if (!config.value.service_link) return
@@ -64,6 +84,13 @@ const jumpLink = () => {
 const jump = (name) => {
     router.push({ name })
 }
+
+http.activity().then(res => {
+    console.error('----', res)
+    if (res) {
+        store.commit('setActives', res)
+    }
+})
 </script>
 
 <style lang="less" scoped>
@@ -90,7 +117,7 @@ const jump = (name) => {
         .num {
             line-height: 24rem;
             font-size: 8rem;
-            color: #333;
+            color: #ccc;
             font-weight: 600;
             margin-bottom: 30px;
         }
@@ -118,7 +145,7 @@ const jump = (name) => {
     .subtitle {
         font-size: 4rem;
         font-weight: 600;
-        color: #000;
+        color: #fff;
         padding: 4rem 4rem 6rem 4rem;
     }
 
@@ -159,7 +186,7 @@ const jump = (name) => {
             justify-content: center;
 
             .num {
-                color: #000;
+                color: #fff;
                 font-weight: 600;
                 margin: 4rem 0;
             }

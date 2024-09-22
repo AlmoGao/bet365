@@ -150,7 +150,7 @@ const upload = file => {
         .qrcode {
             width: 45rem;
             height: 45rem;
-            border: 1px solid #4936DF;
+            border: 1px solid #8475f9;
         }
     }
 
@@ -160,7 +160,7 @@ const upload = file => {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            color: #000;
+            color: #fff;
             font-weight: bold;
 
             img {

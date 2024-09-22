@@ -64,8 +64,8 @@ const jump = (item) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #fff;
-  color: #999;
+  background-color: #333;
+  color: #ddd;
   border-top: 1px solid #ddd;
 
   .bottom-tab {
@@ -85,7 +85,7 @@ const jump = (item) => {
   }
 
   .curr-tab {
-    color: #4936DF;
+    color: #8475f9;
   }
 }
 </style>

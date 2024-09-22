@@ -411,7 +411,7 @@ defineExpose({
             width: 12rem;
             height: 12rem;
             border-radius: 50%;
-            color: #000;
+            color: #fff;
             font-weight: bold;
             border: 1px solid #eee;
             display: flex;

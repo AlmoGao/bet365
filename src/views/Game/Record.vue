@@ -92,13 +92,13 @@ const getRs = item => {
                 .ball {
                     width: 8rem;
                     height: 8rem;
-                    color: #000;
+                    color: #fff;
                     font-weight: bold;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     border-radius: 50%;
-                    background-color: #eee;
+                    background-color: #333;
                 }
             }
 

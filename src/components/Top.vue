@@ -24,11 +24,11 @@ const props = defineProps({
   },
   bgColor: {
     type: String,
-    default: "#fff",
+    default: "#333",
   },
   color: {
     type: String,
-    default: "#333",
+    default: "#ccc",
   },
   backFunc: {
     type: Function,

@@ -900,6 +900,7 @@ onBeforeUnmount(() => {
     max-height: 80vh;
     display: flex;
     flex-direction: column;
+    background-color: #383838;
     overflow: hidden;
 
     .bet_top {
@@ -934,7 +935,7 @@ onBeforeUnmount(() => {
 
             .num {
                 font-weight: bold;
-                color: #000;
+                color: fff;
                 font-size: 4rem;
             }
         }
@@ -956,7 +957,7 @@ onBeforeUnmount(() => {
         flex-direction: column;
         font-weight: bold;
         font-size: 4rem;
-        background-color: #4936df;
+        background-color: #8475f9;
         color: #fff;
 
         .return {
@@ -1001,9 +1002,10 @@ onBeforeUnmount(() => {
                 .bet_ipt_box {
                     display: flex;
                     align-items: center;
-                    background-color: #eee;
+                    background-color: #383838;
                     height: 10rem;
                     padding: 0 2rem;
+                    border: 1px solid #666;
 
                     .bet_ipt {
                         height: 100%;
@@ -1049,7 +1051,7 @@ onBeforeUnmount(() => {
     bottom: 6rem;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #E4E4E4;
+    background-color: #383838;
 
     .title {
         display: flex;

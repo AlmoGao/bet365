@@ -105,7 +105,7 @@ const submit = () => {
         }
 
         .active_tab {
-            color: #4936DF;
+            color: #8475f9;
             font-weight: bold;
         }
     }
