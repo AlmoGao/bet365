@@ -18,6 +18,7 @@ import ms from "@/assets/lang/ms.png"
 import th from "@/assets/lang/th.png"
 import vi from "@/assets/lang/vi.png"
 import ru from "@/assets/lang/ru.svg"
+import pt from "@/assets/lang/pt.png"
 
 const iconMap = ref({
     'zh-cn': cn,
@@ -29,6 +30,7 @@ const iconMap = ref({
     vi,
     id,
     ms,
-    'ru-RU': ru
+    'ru-RU': ru,
+    pt,
 })
 </script>

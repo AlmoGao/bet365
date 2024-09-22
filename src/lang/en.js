@@ -247,4 +247,16 @@ export default {
   22: 'Under review',
   23: 'Success',
   24: 'Failed',
+
+  bb69: 'Total - size, odd or even',
+  bb70: 'Size and odd or even of the total of the winning numbers',
+  bb71: 'white',
+  bb72: 'green',
+  bb73: 'red',
+  bb74: 'blue',
+  bb75: 'purple',
+  bb76: 'orange',
+  bb77: 'brown',
+  bb78: 'grey',
+  bb79: 'yellow',
 };

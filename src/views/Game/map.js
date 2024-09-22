@@ -1,4 +1,4 @@
-
+import { _t } from "@/lang/index";
 
 export const colorMap = {
     white: '#aaa',
@@ -11,14 +11,16 @@ export const colorMap = {
     grey: '#666',
     yellow: '#ffe440'
 }
-export const colorTextMap = {
-    white: '白色',
-    green: '绿色',
-    red: '红色',
-    blue: '蓝色',
-    purple: '紫色',
-    orange: '橙色',
-    brown: '棕色',
-    grey: '灰色',
-    yellow: '黄色'
+export const colorTextMap = () => {
+    return {
+        white: _t('bb71'),
+        green: _t('bb72'),
+        red: _t('bb73'),
+        blue: _t('bb74'),
+        purple: _t('bb75'),
+        orange: _t('bb76'),
+        brown: _t('bb77'),
+        grey: _t('bb78'),
+        yellow: _t('bb79'),
+    }
 }

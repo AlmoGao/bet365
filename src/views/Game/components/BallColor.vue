@@ -11,7 +11,7 @@
                 <div class="name"></div>
                 <div class="box_c" v-for="(val, key) in props.config.number_json" :key="key"
                     :style="{ marginLeft: `${8 - Object.keys(props.config.number_json).length}rem` }">{{
-                        colorTextMap[key]
+                        colorTextMap()[key]
                     }}
                 </div>
             </div>

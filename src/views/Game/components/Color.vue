@@ -10,7 +10,7 @@
                 <div class="box_c"
                     :style="{ border: `1px solid ${colorMap[key]}`, backgroundColor: curr == key ? colorMap[key] : '' }">
                 </div>
-                <div>{{ colorTextMap[key] }}</div>
+                <div>{{ colorTextMap()[key] }}</div>
             </div>
         </div>
     </div>

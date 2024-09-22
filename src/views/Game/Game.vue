@@ -3,7 +3,13 @@
     <div class="page-game">
         <Top :title="game.name" />
 
-        <div>
+        <div style="position: relative">
+            <!-- 期号和倒计时 -->
+            <div
+                style="position: absolute;z-index: 99;display: flex;align-items: center;right: 4rem;top:4rem;font-weight: bold;">
+                <div style="margin-right: 4rem;">{{ currE.expect || '' }}</div>
+                <div>{{ timeStr }}</div>
+            </div>
             <van-tabs v-model:active="active" shrink animated>
                 <van-tab :title="_t('bb10')">
                     <div class="mid"></div>
@@ -69,7 +75,7 @@
                     <div v-if="preItem.code == 16" style="display: flex;align-items: center;">
                         <div style="width:8rem;height:8rem;border-radius: 50%;margin-right:2rem"
                             :style="{ backgroundColor: colorMap[preItem.key] }"></div>
-                        <span>{{ colorTextMap[preItem.key] }}</span>
+                        <span>{{ colorTextMap()[preItem.key] }}</span>
                     </div>
                     <!-- 球的颜色 -->
                     <div v-if="[11].includes(preItem.code)" style="display: flex;flex-wrap: wrap;align-items: center;">
@@ -79,7 +85,7 @@
                             <div>{{ _t('10') }}{{ i }} </div>
                             <div style="width:4rem;height:4rem;border-radius: 50%;margin:0 1rem"
                                 :style="{ backgroundColor: colorMap[item] }"></div>
-                            <span>{{ colorTextMap[item] }}</span>
+                            <span>{{ colorTextMap()[item] }}</span>
                         </div>
                     </div>
                     <!-- 特别号码/第一个号码/单式/组合 -->
@@ -243,7 +249,7 @@
                                     <div style="display: flex;align-items: center;padding: 0 4rem">
                                         <div style="width:8rem;height:8rem;border-radius: 50%;margin-right:2rem"
                                             :style="{ backgroundColor: colorMap[item.key] }"></div>
-                                        <span>{{ colorTextMap[item.key] }}</span>
+                                        <span>{{ colorTextMap()[item.key] }}</span>
                                     </div>
 
                                     <div style="text-align: right;padding-right:4rem" v-if="item.amount">
@@ -275,7 +281,7 @@
                                             <div>{{ _t('10') }}{{ i }} </div>
                                             <div style="width:4rem;height:4rem;border-radius: 50%;margin:0 1rem"
                                                 :style="{ backgroundColor: colorMap[t] }"></div>
-                                            <span>{{ colorTextMap[t] }}</span>
+                                            <span>{{ colorTextMap()[t] }}</span>
                                         </div>
                                     </div>
 
@@ -529,7 +535,7 @@
 
 <script setup>
 import Top from "@/components/Top.vue"
-import { ref, computed } from "vue"
+import { ref, computed, onMounted, onBeforeUnmount } from "vue"
 import { colorMap, colorTextMap } from './map'
 import Number from "./components/Number.vue"
 import BallColor from "./components/BallColor.vue"
@@ -840,6 +846,44 @@ function factorial(n) {
 function combination(n, k) {
     return factorial(n) / (factorial(k) * factorial(n - k));
 }
+
+
+// 获取期号
+const currE = ref({})
+const timeStr = ref('')
+let interval = null
+const getE = () => {
+    http.game_expect({
+        lotto_id: game.value.id
+    }).then(res => {
+        if (res && res[0]) {
+            currE.value = res[0]
+        }
+    })
+}
+getE()
+const formatSec2 = (timestamp) => {
+    if (!timestamp) return ''
+    let seconds = timestamp - Date.now() / 1000
+    if (seconds <= 0) return ''
+    const hours = Math.floor(seconds / 3600);
+    seconds %= 3600;
+    const minutes = Math.floor(seconds / 60);
+    const sec = Math.ceil(seconds % 60)
+    return `${hours}:${minutes}:${sec}`;
+}
+
+onMounted(() => {
+    interval = setInterval(() => {
+        timeStr.value = formatSec2(currE.value.lotterytime)
+        if (!timeStr.value) {
+            getE()
+        }
+    }, 1000)
+})
+onBeforeUnmount(() => {
+    interval && clearInterval(interval)
+})
 </script>
 
 <style lang="less" scoped>

@@ -2,11 +2,11 @@
 <template>
     <div class="bet_total">
         <van-tabs v-model:active="active" shrink>
-            <van-tab title="总和-大小单双"></van-tab>
+            <van-tab :title="_t('bb69')"></van-tab>
         </van-tabs>
 
         <div class="content">
-            <div class="tip">开奖号码总和的大小和单双</div>
+            <div class="tip">{{ _t('bb70') }}</div>
 
             <div class="boxs">
                 <div class="box" @click="clickItem('大', other_json['大'])">

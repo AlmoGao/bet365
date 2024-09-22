@@ -250,4 +250,15 @@ export default {
   23: 'Sucesso',
   24: 'Fracasso',
 
+  bb69: 'Soma - tamanho ímpar e par',
+  bb70: 'A soma dos números da loteria e dos números pares e ímpares',
+  bb71: 'branco',
+  bb72: 'verde',
+  bb73: 'vermelho',
+  bb74: 'azul',
+  bb75: 'roxo',
+  bb76: 'laranja',
+  bb77: 'marrom',
+  bb78: 'cinza',
+  bb79: 'amarelo',
 };

@@ -3,9 +3,9 @@
   <div class="page-home">
     <!-- 顶部 -->
     <div class="top">
-      <!-- <img style="width:10rem;height:10rem" :src="logo" alt=""> -->
+      <img style="width:10rem;height:10rem" :src="logo" v-if="logo" alt="logo">
       <div></div>
-      <LangIcon />
+      <LangIcon style="width:12rem;height:12rem" />
     </div>
 
     <!-- <van-swipe style="margin-bottom:2rem" class="my-swipe" :autoplay="3000" indicator-color="white">

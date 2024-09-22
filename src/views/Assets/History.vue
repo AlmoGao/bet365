@@ -54,7 +54,7 @@
                             <div>{{ _t('10') }}{{ i + 1 }} </div>
                             <div style="width:4rem;height:4rem;border-radius: 50%;margin:0 1rem"
                                 :style="{ backgroundColor: colorMap[item] || '#999' }"></div>
-                            <span>{{ colorTextMap[item] }}</span>
+                            <span>{{ colorTextMap()[item] }}</span>
                         </div>
                     </div>
                     <!-- 特别号码/第一个号码/单式/组合 -->
