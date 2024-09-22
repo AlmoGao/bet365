@@ -59,7 +59,7 @@ const props = defineProps({
 const active = ref(0)
 const clickItem = (key, val) => {
     emits('preBet', {
-        code: 29,
+        code: 26,
         key: key,
         p: val
     })

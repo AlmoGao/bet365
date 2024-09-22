@@ -16,7 +16,7 @@
                 <!-- 总结 -->
                 <div class="totals" v-if="game.name == 'bet365'">
                     <div class="total">{{ item.bs }}</div>
-                    <div class="total">{{ item.oe }}</div>
+                    <div class="total" style="margin-right: 20rem;">{{ item.oe == 1 ? _t('b7') : _t('b8') }}</div>
                 </div>
             </div>
         </div>
@@ -27,6 +27,7 @@
 import http from "@/api/index"
 import { ref, computed } from "vue"
 import store from "@/store";
+import { _t } from "@/lang/index";
 
 const game = computed(() => store.state.currGame || {})
 const list = ref()
@@ -36,7 +37,15 @@ const getList = () => {
     http.lottery_results({
         lotto_id: game.value.id
     }).then(res => {
-        list.value = res || []
+        list.value = (res || []).map((item) => {
+            let total = 0
+            const obj = getRs(item)
+            for (let key in obj) {
+                total += obj[key] * 1
+            }
+            item.oe = total % 2 == 1
+            return item
+        })
     }).finally(() => {
         loading.value = false
     })
@@ -101,7 +110,7 @@ const getRs = item => {
                 padding: 2rem 4rem;
 
                 .total {
-                    margin-left: 4rem;
+                    margin: 0 2rem;
                 }
             }
         }

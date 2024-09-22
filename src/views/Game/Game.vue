@@ -49,7 +49,7 @@
         <div class="content">
             <div class="bet_info">
                 <!-- 总和 -->
-                <div v-if="[20, 29].includes(preItem.code)">
+                <div v-if="[20, 26].includes(preItem.code)">
                     {{ preItem.key }}
                 </div>
                 <!-- 奇数/偶  -->
@@ -149,7 +149,7 @@
 
                     <template v-for="(item, i) in betList">
                         <!-- 总和  -->
-                        <div class="bet_item" v-if="[20, 29].includes(item.code)">
+                        <div class="bet_item" v-if="[20, 26].includes(item.code)">
                             <div class="bet_info">
                                 <van-icon @click="removeItem(i)" class="bet_info_delete" name="cross" />
                                 <div class="bet_info_name">{{ typeMap[item.code] }}</div>
