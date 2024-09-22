@@ -24,6 +24,11 @@ const routes = [
         name: 'assets',
         component: () => import('../views/Assets/Assets.vue')
       },
+      { // 活动
+        path: '/activity',
+        name: 'activity',
+        component: () => import('../views/Assets/Activity.vue')
+      },
       { // 充币记录
         path: '/rcList',
         name: 'rcList',

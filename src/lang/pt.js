@@ -251,6 +251,7 @@ export default {
   24: 'Fracasso',
   25: 'Pontos de reputação',
   26: 'Nível',
+  27: 'Atividade',
 
   bb69: 'Soma - tamanho ímpar e par',
   bb70: 'A soma dos números da loteria e dos números pares e ímpares',

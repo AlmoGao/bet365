@@ -20,61 +20,61 @@
     <!-- 玩法 -->
     <div class="games">
       <template v-for="item in games">
-        <div class="game" @click="clickItem(item)" v-if="item.name == 'bet365'">
+        <div class="game" @click="clickItem(item)" v-if="item.id == 1">
           <div class="game_icon">
             <img src="@/assets/games/game1.png" alt="img">
           </div>
           <div>{{ _t('bb1') }}</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == '49s'">
+        <div class="game" @click="clickItem(item)" v-if="item.id == 2">
           <div class="game_icon">
             <img src="@/assets/games/game2.png" alt="img">
           </div>
           <div>49s</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == '法国乐透'">
+        <div class="game" @click="clickItem(item)" v-if="item.id == 4">
           <div class="game_icon">
             <img src="@/assets/games/game3.svg" alt="img">
           </div>
           <div>{{ _t('bb2') }}</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == '西班牙乐透'">
+        <div class="game" @click="clickItem(item)" v-if="item.id == 8">
           <div class="game_icon">
             <img src="@/assets/games/game4.svg" alt="img">
           </div>
           <div>{{ _t('bb3') }}</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == '爱尔兰每日百万'">
+        <div class="game" @click="clickItem(item)" v-if="item.id == 7">
           <div class="game_icon">
             <img src="@/assets/games/game5.svg" alt="img">
           </div>
           <div>{{ _t('bb4') }}</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == '欧洲百万'">
+        <div class="game" @click="clickItem(item)" v-if="item.id == 6">
           <div class="game_icon">
             <img src="@/assets/games/game6.svg" alt="img">
           </div>
           <div>{{ _t('bb5') }}</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == '德国乐透'">
+        <div class="game" @click="clickItem(item)" v-if="item.id == 3">
           <div class="game_icon">
             <img src="@/assets/games/game7.svg" alt="img">
           </div>
           <div>{{ _t('bb6') }}</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == '爱尔兰乐透'">
+        <div class="game" @click="clickItem(item)" v-if="item.id == 5">
           <div class="game_icon">
             <img src="@/assets/games/game8.svg" alt="img">
           </div>
           <div>{{ _t('bb7') }}</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == '纽约乐透'">
+        <div class="game" @click="clickItem(item)" v-if="item.id == 10">
           <div class="game_icon">
             <img src="@/assets/games/game9.svg" alt="img">
           </div>
           <div>{{ _t('bb8') }}</div>
         </div>
-        <div class="game" @click="clickItem(item)" v-if="item.name == '加拿大乐透'">
+        <div class="game" @click="clickItem(item)" v-if="item.id == 9">
           <div class="game_icon">
             <img src="@/assets/games/game10.svg" alt="img">
           </div>
@@ -216,7 +216,7 @@ const jump = name => {
     align-items: stretch;
     justify-content: space-between;
     flex-wrap: wrap;
-    margin: 8rem 0 20rem 0;
+    margin: 8rem 0;
 
     .game {
       width: 32%;

@@ -18,10 +18,22 @@
             <div class="num">{{ show ? (config.currency || '') + ' ' + userInfo.money : '******' }}</div>
 
 
-            <div v-for="(item, i) in actives" :key="i" @click="openItem(item)">
-                <img style="width:100%;height:auto" :src="actives[0].cover_image" alt="cover">
-            </div>
+        </div>
 
+        <div class="top" style="border-top: none">
+            <div class="navs">
+                <div class="nav" @click="jump('activity')">
+                    <img src="@/assets/assets/gift.png" alt="img">
+                    <div>{{ _t('27') }}</div>
+                </div>
+                <div class="nav" @click="jump('hisory')">
+                    <img src="@/assets/my/nav1.jpeg" alt="img">
+                    <div>{{ _t('3') }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="top" style="border-top: none">
             <div class="navs">
                 <div class="nav" @click="jumpLink">
                     <img src="@/assets/assets/nav-1.svg" alt="img">
@@ -48,12 +60,7 @@
         </div>
     </div>
 
-    <!-- 活动弹窗 -->
-    <van-dialog v-model:show="showAd" :title="''" :show-cancel-button="false">
-        <div style="max-height: 60vh;overflow-y: auto;">
-            <img v-for="(item, i) in activesPics" :key="i" style="width:100%;height:auto" :src="item" alt="cover">
-        </div>
-    </van-dialog>
+
 </template>
 
 <script setup>
@@ -69,13 +76,8 @@ const config = computed(() => store.state.config)
 
 const activeTab = ref(0)
 const show = ref(true)
-const actives = computed(() => store.state.actives || [])
-const activesPics = ref([])
-const showAd = ref(false)
-const openItem = item => {
-    activesPics.value = item.content_images.split(',')
-    showAd.value = true
-}
+
+
 
 const jumpLink = () => {
     if (!config.value.service_link) return
@@ -85,12 +87,7 @@ const jump = (name) => {
     router.push({ name })
 }
 
-http.activity().then(res => {
-    console.error('----', res)
-    if (res) {
-        store.commit('setActives', res)
-    }
-})
+
 </script>
 
 <style lang="less" scoped>

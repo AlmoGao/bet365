@@ -249,6 +249,7 @@ export default {
   24: 'Failed',
   25: 'Reputation',
   26: 'Level',
+  27: 'Activity',
 
   bb69: 'Total - size, odd or even',
   bb70: 'Size and odd or even of the total of the winning numbers',
