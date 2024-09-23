@@ -223,6 +223,11 @@ export default {
   b6: 'Even',
   b7: 'Single',
   b8: 'Double',
+  '大': 'Big',
+  '小': 'Small',
+  '单': 'Single',
+  '双': 'Double',
+
   1: 'Balance',
   2: 'Wallet',
   3: 'History',

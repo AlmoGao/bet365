@@ -224,6 +224,10 @@ export default {
   b6: 'número par',
   b7: 'Único',
   b8: 'duplo',
+  '大': 'grande',
+  '小': 'pequeno',
+  '单': 'Único',
+  '双': 'duplo',
 
   1: 'Equilíbrio',
   2: 'Carteira',

@@ -55,8 +55,11 @@
         <div class="content">
             <div class="bet_info">
                 <!-- 总和 -->
-                <div v-if="[20, 26].includes(preItem.code)">
+                <div v-if="[20].includes(preItem.code)">
                     {{ preItem.key }}
+                </div>
+                <div v-if="[26].includes(preItem.code)">
+                    {{ _t(preItem.key) }}
                 </div>
                 <!-- 奇数/偶  -->
                 <div v-if="[12, 17, 18].includes(preItem.code)"
@@ -168,7 +171,7 @@
                             </div>
                             <div style="display: flex;align-items: center;justify-content: space-between;">
                                 <div style="padding: 0 4rem">
-                                    {{ item.key }}
+                                    {{ item.code == 26 ? _t(item.key) : item.key }}
                                 </div>
 
                                 <div style="text-align: right;padding-right:4rem" v-if="item.amount">
