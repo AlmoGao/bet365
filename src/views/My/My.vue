@@ -13,7 +13,7 @@
             </div>
             <div>{{ _t('1') }}：{{ (config.currency || '') + ' ' + userInfo.money }}</div>
             <div>{{ _t('25') }}：{{ userInfo.score }}</div>
-            <div v-if="userInfo.level">{{ _t('26') }}：{{ userInfo.level }}</div>
+            <div>{{ _t('26') }}：{{ userInfo.level || '--' }}</div>
          </div>
       </div>
 

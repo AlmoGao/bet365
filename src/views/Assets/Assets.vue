@@ -1,9 +1,9 @@
 <!-- 资产 -->
 <template>
     <div class="page-assets">
-        <van-tabs shrink v-model:active="activeTab">
+        <!-- <van-tabs shrink v-model:active="activeTab">
             <van-tab :title="_t('t110')"></van-tab>
-        </van-tabs>
+        </van-tabs> -->
 
         <div class="top">
             <div class="title">
@@ -34,30 +34,30 @@
         </div>
 
         <div class="top" style="border-top: none">
-            <div class="navs">
+            <div class="navs2">
                 <div class="nav" @click="jumpLink">
                     <img src="@/assets/assets/nav-1.svg" alt="img">
-                    <div>{{ _t('11') }}</div>
+                    <div class="info">{{ _t('11') }}</div>
+                    <van-icon name="arrow" />
                 </div>
                 <div class="nav" @click="jump('withdraw')">
                     <img src="@/assets/assets/nav-2.svg" alt="img">
-                    <div>{{ _t('t113') }}</div>
+                    <div class="info">{{ _t('t113') }}</div>
+                    <van-icon name="arrow" />
+                </div>
+                <div class="nav" @click="jump('rcList')">
+                    <img src="@/assets/assets/record.png" alt="img">
+                    <div class="info">{{ _t('12') }}</div>
+                    <van-icon name="arrow" />
+                </div>
+                <div class="nav" @click="jump('wdList')">
+                    <img src="@/assets/assets/record.png" alt="img">
+                    <div class="info">{{ _t('t115') }}</div>
+                    <van-icon name="arrow" />
                 </div>
             </div>
         </div>
 
-        <div class="top" style="border-top: none">
-            <div class="navs">
-                <div class="nav" @click="jump('rcList')">
-                    <img src="@/assets/assets/record.png" alt="img">
-                    <div>{{ _t('12') }}</div>
-                </div>
-                <div class="nav" @click="jump('wdList')">
-                    <img src="@/assets/assets/record.png" alt="img">
-                    <div>{{ _t('t115') }}</div>
-                </div>
-            </div>
-        </div>
     </div>
 
 
@@ -92,12 +92,12 @@ const jump = (name) => {
 
 <style lang="less" scoped>
 .page-assets {
-    padding: 2rem 0 18rem 0;
+    padding: 6rem 0 18rem 0;
 
     .top {
-        padding: 8rem 4rem 6rem 4rem;
-        border-top: 1px solid #e5e5e5;
-        border-bottom: 1px solid #e5e5e5;
+        padding: 8rem 4rem 0 4rem;
+        // border-top: 1px solid #e5e5e5;
+        // border-bottom: 1px solid #e5e5e5;
 
         .title {
             display: flex;
@@ -116,7 +116,6 @@ const jump = (name) => {
             font-size: 8rem;
             color: #ccc;
             font-weight: 600;
-            margin-bottom: 30px;
         }
 
         .navs {
@@ -134,6 +133,27 @@ const jump = (name) => {
                     width: 10rem;
                     height: 10rem;
                     margin-bottom: 2rem;
+                }
+            }
+        }
+
+        .navs2 {
+            padding: 5rem 0;
+
+            .nav {
+                padding: 5rem;
+                display: flex;
+                align-items: center;
+
+                img {
+                    width: 6rem;
+                    height: 6rem;
+                    margin-right: 4rem;
+                }
+
+                .info {
+                    flex: 1;
+                    font-size: 3.4rem;
                 }
             }
         }
