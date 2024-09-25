@@ -3,7 +3,7 @@
   <div class="page-home">
     <!-- 顶部 -->
     <div class="top">
-      <img style="height:10rem" :src="logo" v-if="logo" alt="logo">
+      <img style="height:7rem" :src="logo" v-if="logo" alt="logo">
       <div></div>
       <LangIcon style="width:10rem;height:10rem" />
     </div>
