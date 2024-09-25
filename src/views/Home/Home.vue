@@ -3,7 +3,7 @@
   <div class="page-home">
     <!-- 顶部 -->
     <div class="top">
-      <img style="width:10rem;height:10rem" :src="logo" v-if="logo" alt="logo">
+      <img style="height:10rem" :src="logo" v-if="logo" alt="logo">
       <div></div>
       <LangIcon style="width:10rem;height:10rem" />
     </div>
@@ -108,7 +108,7 @@
 
 
     <div class="notice_list">
-      <div class="notice_box">
+      <div class="notice_box" :style="{ animationDuration: `${notices.length * 1.5}s` }">
         <div class="norice_item" v-for="(item, i) in notices">{{ item }}</div>
       </div>
     </div>
@@ -210,11 +210,11 @@ const jump = name => {
 <style lang="less" scoped>
 @keyframes mymove {
   from {
-    transform: translateY(calc(100% - 40vh));
+    transform: translateY(40vh);
   }
 
   to {
-    transform: translateY(calc(-100% + 40vh));
+    transform: translateY(-100%);
   }
 }
 
